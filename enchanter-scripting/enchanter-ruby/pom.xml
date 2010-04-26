@@ -11,7 +11,7 @@
  
   <artifactId>enchanter-ruby</artifactId>
 
-  <name>Enchanter with Ruby</name>'
+  <name>Enchanter with Ruby</name>
   
   <dependencies>
     <dependency>
