@@ -43,7 +43,6 @@ public class TelnetStreamConnectionTest
         stream = new DefaultStreamConnection();
         conn = new TelnetConnectionLibrary();
         stream.setConnectionLibrary( conn );
-        stream.connect( "10.2.24.13" );
     }
 
     protected void tearDown()
@@ -61,6 +60,7 @@ public class TelnetStreamConnectionTest
         throws Exception
     {
 
+        stream.connect( "10.2.24.13" );
         stream.setTimeout( 10000 );
 
         stream.sendLine( "" );

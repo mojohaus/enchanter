@@ -31,6 +31,11 @@
     </license>
   </licenses>
 
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/MOJO</url>
+  </issueManagement>
+
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/enchanter</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/enchanter</developerConnection>
@@ -67,6 +72,22 @@
         <artifactId>enchanter-core</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.codehaus.mojo.enchanter</groupId>
+        <artifactId>enchanter-ruby</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.mojo.enchanter</groupId>
+        <artifactId>enchanter-python</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.mojo.enchanter</groupId>
+        <artifactId>enchanter-beanshell</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      
       
       <dependency>
         <groupId>org.python</groupId>
@@ -110,6 +131,7 @@
   <modules>
     <module>enchanter-core</module>
     <module>enchanter-scripting</module>
+    <module>enchanter-maven-plugin</module>
   </modules>
 
   
@@ -137,6 +159,34 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>[1.5,)</version>
+                </requireJavaVersion>
+                <requireMavenVersion>
+                  <version>[2.2.1,)</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+    
     
   </build>
   
