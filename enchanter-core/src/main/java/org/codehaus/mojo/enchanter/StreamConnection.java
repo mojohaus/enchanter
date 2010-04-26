@@ -5,25 +5,28 @@ import java.io.IOException;
 /**
  * Represents an StreamConnection server connection implementation
  */
-public interface StreamConnection {
+public interface StreamConnection
+{
 
-	/**
+    /**
      * Connect to the remote StreamConnection server using no authentication
      * 
      * @param host The remote StreamConnection server
      * @throws IOException If a connection cannot be made
      */
-	public void connect(String host) throws IOException;
+    public void connect( String host )
+        throws IOException;
 
-	/**
+    /**
      * Connect to the remote StreamConnection server using no authentication
      * 
      * @param host The remote StreamConnection server
      * @param port The port to use
      * @throws IOException If a connection cannot be made
      */
-	public void connect(String host, int port) throws IOException;
-	
+    public void connect( String host, int port )
+        throws IOException;
+
     /**
      * Connect to the remote StreamConnection server using public key authentication
      * 
@@ -31,7 +34,8 @@ public interface StreamConnection {
      * @param username The user name on the server
      * @throws IOException If a connection cannot be made
      */
-    public void connect(String host, String username) throws IOException;
+    public void connect( String host, String username )
+        throws IOException;
 
     /**
      * Connect to the remote StreamConnection server using public key or password authentication
@@ -40,9 +44,9 @@ public interface StreamConnection {
      * @param username The user name on the server
      * @throws IOException If a connection cannot be made
      */
-    public void connect(String host, int port, String username, String password)
-            throws IOException;
-    
+    public void connect( String host, int port, String username, String password )
+        throws IOException;
+
     /**
      * Connect to the remote StreamConnection server using public key or password authentication
      * 
@@ -53,15 +57,15 @@ public interface StreamConnection {
      * @param privateKeyPath The path to the private key
      * @throws IOException If a connection cannot be made
      */
-    public void connect(String host, int port, String username, String password, String privateKeyPath)
-            throws IOException;
+    public void connect( String host, int port, String username, String password, String privateKeyPath )
+        throws IOException;
 
     /**
      * Sets the timeout for all wait calls
      * 
      * @param timeout The timeout in milliseconds
      */
-    public void setTimeout(int timeout);
+    public void setTimeout( int timeout );
 
     /**
      * Sends the response whenever the prompt is encountered. Only activated
@@ -71,7 +75,7 @@ public interface StreamConnection {
      * @param prompt The text to match for the response
      * @param response The response to send
      */
-    public void respond(String prompt, String response);
+    public void respond( String prompt, String response );
 
     /**
      * Sets the text to the remote server
@@ -79,7 +83,8 @@ public interface StreamConnection {
      * @param text The text to send
      * @throws IOException
      */
-    public void send(String text) throws IOException;
+    public void send( String text )
+        throws IOException;
 
     /**
      * Sends the text to the remote server followed by an end of line marker
@@ -87,7 +92,8 @@ public interface StreamConnection {
      * @param text The text to send
      * @throws IOException
      */
-    public void sendLine(String text) throws IOException;
+    public void sendLine( String text )
+        throws IOException;
 
     /**
      * Waits for multiple strings, returning the index of the first match
@@ -96,7 +102,8 @@ public interface StreamConnection {
      * @return The index of the prompt matched, -1 if the timeout was reached
      * @throws IOException
      */
-    public int waitForMux(String... text) throws IOException;
+    public int waitForMux( String... text )
+        throws IOException;
 
     /**
      * Waits for multiple strings, returning the index of the first match. Can
@@ -108,8 +115,8 @@ public interface StreamConnection {
      * @return The index of the prompt matched, -1 if the timeout was reached
      * @throws IOException
      */
-    public int waitForMux(String[] text, boolean readLineOnMatch)
-            throws IOException;
+    public int waitForMux( String[] text, boolean readLineOnMatch )
+        throws IOException;
 
     /**
      * Waits for a prompt and returns if it was matched.
@@ -118,7 +125,8 @@ public interface StreamConnection {
      * @return True if matched, false if the timeout was reached
      * @throws IOException
      */
-    public boolean waitFor(String text) throws IOException;
+    public boolean waitFor( String text )
+        throws IOException;
 
     /**
      * Waits for a prompt and returns if it was matched. Can optionally read the
@@ -130,8 +138,8 @@ public interface StreamConnection {
      * @return True if matched, false if the timeout was reached
      * @throws IOException
      */
-    public boolean waitFor(String text, boolean readLineOnMatch)
-            throws IOException;
+    public boolean waitFor( String text, boolean readLineOnMatch )
+        throws IOException;
 
     /**
      * Gets the last line matched
@@ -146,7 +154,8 @@ public interface StreamConnection {
      * @return The next full line
      * @throws IOException
      */
-    public String getLine() throws IOException;
+    public String getLine()
+        throws IOException;
 
     /**
      * Sleeps for the specified number of milliseconds
@@ -154,20 +163,22 @@ public interface StreamConnection {
      * @param millis The sleep time in milliseconds
      * @throws InterruptedException
      */
-    public void sleep(int millis) throws InterruptedException;
+    public void sleep( int millis )
+        throws InterruptedException;
 
     /**
      * Disconnects from the remote StreamConnection server
      * @throws IOException 
      */
-    public void disconnect() throws IOException;
+    public void disconnect()
+        throws IOException;
 
     /**
      * Adds a stream listener to be notified of each byte read and written.
      * 
      * @param listener The StreamListener implementation
      */
-    public void addStreamListener(StreamListener listener);
+    public void addStreamListener( StreamListener listener );
 
     /**
      * Sets whether to be in debugging mode or not. Debugging mode usually means
@@ -175,7 +186,7 @@ public interface StreamConnection {
      * 
      * @param debug True for debugging mode
      */
-    public void setDebug(boolean debug);
+    public void setDebug( boolean debug );
 
-	public void setEndOfLine(String eol);
+    public void setEndOfLine( String eol );
 }

@@ -12,62 +12,79 @@ import javax.naming.OperationNotSupportedException;
 
 import org.codehaus.mojo.enchanter.ConnectionLibrary;
 
-public class StubConnectionLibrary implements ConnectionLibrary {
+public class StubConnectionLibrary
+    implements ConnectionLibrary
+{
 
-	InputStream inputStream;
-	OutputStream outputStream = new ByteArrayOutputStream();
+    InputStream inputStream;
 
-	public void connect(String host, String username) throws IOException {
-	}
+    OutputStream outputStream = new ByteArrayOutputStream();
 
-	public void connect(String host, int port, String username, String password)
-			throws IOException {
-	}
+    public void connect( String host, String username )
+        throws IOException
+    {
+    }
 
-	public void disconnect() {
-	}
+    public void connect( String host, int port, String username, String password )
+        throws IOException
+    {
+    }
 
-	public InputStream getInputStream() {
-		return inputStream;
-	}
+    public void disconnect()
+    {
+    }
 
-	public OutputStream getOutputStream() {
-		return outputStream;
-	}
+    public InputStream getInputStream()
+    {
+        return inputStream;
+    }
 
-	public void setInputStream(InputStream inputStream) {
-		this.inputStream = inputStream;
-	}
+    public OutputStream getOutputStream()
+    {
+        return outputStream;
+    }
 
-	public void setOutputStream(OutputStream outputStream) {
-		this.outputStream = outputStream;
-	}
+    public void setInputStream( InputStream inputStream )
+    {
+        this.inputStream = inputStream;
+    }
 
-	public String dumpOut() {
-		String data = ((ByteArrayOutputStream) outputStream).toString();
-		outputStream = new ByteArrayOutputStream();
-		return data;
-	}
+    public void setOutputStream( OutputStream outputStream )
+    {
+        this.outputStream = outputStream;
+    }
 
-	public void connect(String host) throws IOException {
-		// TODO Auto-generated method stub
+    public String dumpOut()
+    {
+        String data = ( (ByteArrayOutputStream) outputStream ).toString();
+        outputStream = new ByteArrayOutputStream();
+        return data;
+    }
 
-	}
+    public void connect( String host )
+        throws IOException
+    {
+        // TODO Auto-generated method stub
 
-	public void connect(String host, int port, String username,
-			String password, String privateKeyPath) throws IOException {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    public void connect( String host, int port, String username, String password, String privateKeyPath )
+        throws IOException
+    {
+        // TODO Auto-generated method stub
 
-	public void connect(String host, int port) throws IOException,
-			OperationNotSupportedException {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    public void connect( String host, int port )
+        throws IOException, OperationNotSupportedException
+    {
+        // TODO Auto-generated method stub
 
-	public void setReadTimeout(int msec) throws IOException,
-			OperationNotSupportedException {
-	}
+    }
+
+    public void setReadTimeout( int msec )
+        throws IOException, OperationNotSupportedException
+    {
+    }
 
 }

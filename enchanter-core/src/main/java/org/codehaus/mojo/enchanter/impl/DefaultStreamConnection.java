@@ -21,370 +21,502 @@ import org.codehaus.mojo.enchanter.StreamListener;
 /**
  * Default implementation of StreamConnection connection and parsing methods
  */
-public class DefaultStreamConnection implements StreamConnection {
-	
-	private final static int DEFAULT_TIMEOUT = 30000;
+public class DefaultStreamConnection
+    implements StreamConnection
+{
 
-	private BufferedInputStream in;
-	private PrintWriter out;
+    private final static int DEFAULT_TIMEOUT = 30000;
 
-	private Map<String, Response> respondWith = new HashMap<String, Response>();
-	private List<Prompt> waitFor = new ArrayList<Prompt>();
-	List<StreamListener> streamListeners = new ArrayList<StreamListener>();
+    private BufferedInputStream in;
 
-	private String endOfLine = "\r\n";
-	private char lastChar;
-	private boolean alive = true;
-	private StringBuilder lastLine = new StringBuilder();
-	private Thread timeoutThread;
-	private int timeout = 200;
-	private ConnectionLibrary connectionLibrary;
+    private PrintWriter out;
 
-	public DefaultStreamConnection() {
-		this.connectionLibrary = new GanymedSSHLibrary();
-	}
+    private Map<String, Response> respondWith = new HashMap<String, Response>();
 
-	public void connect(String host) throws IOException {
-		try {
-			connectionLibrary.connect(host);
-		} catch (OperationNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		setupStreams();
-	}
+    private List<Prompt> waitFor = new ArrayList<Prompt>();
 
-	public void connect(String host, int port) throws IOException {
-		try {
-			connectionLibrary.connect(host, port);
-		} catch (OperationNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		setupStreams();
-	}
+    List<StreamListener> streamListeners = new ArrayList<StreamListener>();
 
-	public void connect(String host, String username) throws IOException {
-		try {
-			connectionLibrary.connect(host, username);
-		} catch (OperationNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		setupStreams();
-	}
+    private String endOfLine = "\r\n";
 
-	private void setupStreams() {
-		this.in = new BufferedInputStream(connectionLibrary.getInputStream());
-		this.out = new PrintWriter(connectionLibrary.getOutputStream());
-		for (StreamListener listener : streamListeners) {
-			listener.init(this.out);
-		}
-	}
+    private char lastChar;
 
-	public void connect(String host, int port, String username,
-			final String password) throws IOException {
-		try {
-			connectionLibrary.connect(host, port, username, password);
-		} catch (OperationNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		setupStreams();
-	}
+    private boolean alive = true;
 
-	public void connect(String host, int port, String username,
-			final String password, String privateKeyPath) throws IOException {
-		try {
-			connectionLibrary.connect(host, port, username, password,
-					privateKeyPath);
-		} catch (OperationNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		setupStreams();
-	}
+    private StringBuilder lastLine = new StringBuilder();
 
-	public void setEndOfLine(String eol) {
-		this.endOfLine = eol;
-	}
+    private Thread timeoutThread;
 
-	public void setConnectionLibrary(ConnectionLibrary lib) {
-		this.connectionLibrary = lib;
-	}
+    private int timeout = 200;
 
-	public void disconnect() throws IOException {
-		if (timeoutThread != null) {
-			timeoutThread.interrupt();
-		}
-		alive = false;
-		connectionLibrary.disconnect();
-	}
+    private ConnectionLibrary connectionLibrary;
 
-	public void addStreamListener(StreamListener listener) {
-		streamListeners.add(listener);
-	}
+    public DefaultStreamConnection()
+    {
+        this.connectionLibrary = new GanymedSSHLibrary();
+    }
 
-	public void setDebug(boolean debug) {
-		if (debug) {
-			addStreamListener(new StreamListener() {
-				public void hasRead(byte b) {
-					if (b != '\r')
-						System.out.print((char) b);
-				}
+    public void connect( String host )
+        throws IOException
+    {
+        try
+        {
+            connectionLibrary.connect( host );
+        }
+        catch ( OperationNotSupportedException e )
+        {
+            throw new RuntimeException( e );
+        }
+        setupStreams();
+    }
 
-				public void hasWritten(byte[] b) {
-					// Not usually necessary
-					// System.out.print(new String(b));
-				}
+    public void connect( String host, int port )
+        throws IOException
+    {
+        try
+        {
+            connectionLibrary.connect( host, port );
+        }
+        catch ( OperationNotSupportedException e )
+        {
+            throw new RuntimeException( e );
+        }
+        setupStreams();
+    }
 
-				public void init(PrintWriter writer) {
-				}
-			});
-		}
-	}
+    public void connect( String host, String username )
+        throws IOException
+    {
+        try
+        {
+            connectionLibrary.connect( host, username );
+        }
+        catch ( OperationNotSupportedException e )
+        {
+            throw new RuntimeException( e );
+        }
+        setupStreams();
+    }
 
-	public void send(String text) throws IOException {
-		print(text, false);
+    private void setupStreams()
+    {
+        this.in = new BufferedInputStream( connectionLibrary.getInputStream() );
+        this.out = new PrintWriter( connectionLibrary.getOutputStream() );
+        for ( StreamListener listener : streamListeners )
+        {
+            listener.init( this.out );
+        }
+    }
 
-	}
+    public void connect( String host, int port, String username, final String password )
+        throws IOException
+    {
+        try
+        {
+            connectionLibrary.connect( host, port, username, password );
+        }
+        catch ( OperationNotSupportedException e )
+        {
+            throw new RuntimeException( e );
+        }
+        setupStreams();
+    }
 
-	public void sendLine(String text) throws IOException {
-		print(text, true);
-	}
+    public void connect( String host, int port, String username, final String password, String privateKeyPath )
+        throws IOException
+    {
+        try
+        {
+            connectionLibrary.connect( host, port, username, password, privateKeyPath );
+        }
+        catch ( OperationNotSupportedException e )
+        {
+            throw new RuntimeException( e );
+        }
+        setupStreams();
+    }
 
-	public void sleep(int millis) throws InterruptedException {
-		Thread.sleep(millis);
-	}
+    public void setEndOfLine( String eol )
+    {
+        this.endOfLine = eol;
+    }
 
-	private void print(String text, boolean eol) throws IOException {
-		text = text.replace("^C", String.valueOf((char) 3));
-		text = text.replace("^M", endOfLine);
-		if (eol) {
-			out.print(text + endOfLine);
-			out.flush();
-			getLine();
-		} else {
-			out.print(text);
-			out.flush();
-		}
-		byte[] bytes = text.getBytes();
-		for (StreamListener listener : streamListeners) {
-			listener.hasWritten(bytes);
-		}
+    public void setConnectionLibrary( ConnectionLibrary lib )
+    {
+        this.connectionLibrary = lib;
+    }
 
-	}
+    public void disconnect()
+        throws IOException
+    {
+        if ( timeoutThread != null )
+        {
+            timeoutThread.interrupt();
+        }
+        alive = false;
+        connectionLibrary.disconnect();
+    }
 
-	public void respond(String prompt, String response) {
-		if (response == null) {
-			respondWith.remove(prompt);
-		} else {
-			respondWith.put(prompt, new Response(prompt, response));
-		}
-	}
+    public void addStreamListener( StreamListener listener )
+    {
+        streamListeners.add( listener );
+    }
 
-	public boolean waitFor(String waitFor) throws IOException {
-		return waitFor(waitFor, false);
-	}
+    public void setDebug( boolean debug )
+    {
+        if ( debug )
+        {
+            addStreamListener( new StreamListener()
+            {
+                public void hasRead( byte b )
+                {
+                    if ( b != '\r' )
+                        System.out.print( (char) b );
+                }
 
-	public boolean waitFor(String waitFor, boolean readLineOnMatch)
-			throws IOException {
-		prepare(new String[] { waitFor });
-		return (readFromStream(readLineOnMatch) == 0);
-	}
+                public void hasWritten( byte[] b )
+                {
+                    // Not usually necessary
+                    // System.out.print(new String(b));
+                }
 
-	public int waitForMux(String... waitFor) throws IOException {
-		return waitForMux(waitFor, false);
-	}
+                public void init( PrintWriter writer )
+                {
+                }
+            } );
+        }
+    }
 
-	public int waitForMux(String[] waitFor, boolean readLineOnMatch)
-			throws IOException {
-		prepare(waitFor);
-		return readFromStream(readLineOnMatch);
-	}
+    public void send( String text )
+        throws IOException
+    {
+        print( text, false );
 
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
-	}
+    }
 
-	protected void prepare(String[] text) {
-		this.alive = true;
-		for (String val : text) {
-			waitFor.add(new Prompt(val));
-		}
-		this.lastLine.setLength(0);
-	}
+    public void sendLine( String text )
+        throws IOException
+    {
+        print( text, true );
+    }
 
-	public String lastLine() {
-		return this.lastLine.toString();
-	}
+    public void sleep( int millis )
+        throws InterruptedException
+    {
+        Thread.sleep( millis );
+    }
 
-	public String getLine() throws IOException {
-		if (waitFor(endOfLine, false)) {
-			return lastLine();
-		}
-		return null;
-	}
+    private void print( String text, boolean eol )
+        throws IOException
+    {
+        text = text.replace( "^C", String.valueOf( (char) 3 ) );
+        text = text.replace( "^M", endOfLine );
+        if ( eol )
+        {
+            out.print( text + endOfLine );
+            out.flush();
+            getLine();
+        }
+        else
+        {
+            out.print( text );
+            out.flush();
+        }
+        byte[] bytes = text.getBytes();
+        for ( StreamListener listener : streamListeners )
+        {
+            listener.hasWritten( bytes );
+        }
 
-	private int read(byte[] data) throws IOException {
-		int length = 0;
-		
-		while ( alive )
-		{
-		    if (in.available() == 0) {
-			    try {
-				    Thread.sleep(100);
-			    } catch (InterruptedException e) {
+    }
 
-			    }
-		    } else {
-			    length = in.read(data);
-			    if ( length > 0 )
-			    {
-			    	break;
-			    }
-		    }
-		}
+    public void respond( String prompt, String response )
+    {
+        if ( response == null )
+        {
+            respondWith.remove( prompt );
+        }
+        else
+        {
+            respondWith.put( prompt, new Response( prompt, response ) );
+        }
+    }
 
-		return length;
-	}
+    public boolean waitFor( String waitFor )
+        throws IOException
+    {
+        return waitFor( waitFor, false );
+    }
 
-	public int readFromStream(boolean readLineOnMatch) throws IOException {
-		int result = -1;
-		byte[] data = new byte[1];
-		int length = 0;
-		boolean readTillEndOfLine = false;
-		if (timeout > 0) {
-			timeoutThread = new Thread() {
-				public void run() {
-					try {
-						this.setName("TimeOut");
-						sleep(timeout);
-					} catch (InterruptedException e) {
-						return;
-					}
-					alive = false;
-				}
-			};
-			timeoutThread.start();
-		}
-		outer:
+    public boolean waitFor( String waitFor, boolean readLineOnMatch )
+        throws IOException
+    {
+        prepare( new String[] { waitFor } );
+        return ( readFromStream( readLineOnMatch ) == 0 );
+    }
 
-		while (alive && (length = read(data)) >= 0) {
+    public int waitForMux( String... waitFor )
+        throws IOException
+    {
+        return waitForMux( waitFor, false );
+    }
 
-			for (int x = 0; x < length; x++) {
-				char c = (char) data[x];
-				for (StreamListener listener : streamListeners) {
-					listener.hasRead((byte) data[x]);
-				}
-				if (readTillEndOfLine && (c == '\r' || c == '\n'))
-					break outer;
+    public int waitForMux( String[] waitFor, boolean readLineOnMatch )
+        throws IOException
+    {
+        prepare( waitFor );
+        return readFromStream( readLineOnMatch );
+    }
 
-				int match = lookForMatch(c);
-				if (match != -1) {
-					result = match;
-					if (readLineOnMatch && (c != '\r' && c != '\n')) {
-						readTillEndOfLine = true;
-					} else {
-						break outer;
-					}
-				} else {
-					lookForResponse((char) data[x]);
-					lastChar = (char) data[x];
-				}
-			}
-		}
-		
-		
-		reset();
-		return result;
-	}
+    public void setTimeout( int timeout )
+    {
+        this.timeout = timeout;
+    }
 
-	int lookForMatch(char s) {
-		if (s != '\r' && s != '\n')
-			lastLine.append(s);
-		for (int m = 0; alive && m < waitFor.size(); m++) {
-			Prompt prompt = (Prompt) waitFor.get(m);
-			if (prompt.matchChar(s)) {
-				// the whole thing matched so, return the match answer
-				if (prompt.match()) {
-					return m;
-				} else {
-					prompt.nextPos();
-				}
+    protected void prepare( String[] text )
+    {
+        this.alive = true;
+        for ( String val : text )
+        {
+            waitFor.add( new Prompt( val ) );
+        }
+        this.lastLine.setLength( 0 );
+    }
 
-			} else {
-				// if the current character did not match reset
-				prompt.resetPos();
-				if (s == '\n' || s == '\r') {
-					lastLine.setLength(0);
-				}
-			}
-		}
-		return -1;
-	}
+    public String lastLine()
+    {
+        return this.lastLine.toString();
+    }
 
-	void lookForResponse(char s) throws IOException {
-		for (Response response : respondWith.values()) {
-			if (response.matchChar(s)) {
-				if (response.match()) {
-					print(response.getResponse(), false);
-					response.resetPos();
-				} else {
-					response.nextPos();
-				}
-			} else {
-				response.resetPos();
-			}
-		}
-	}
+    public String getLine()
+        throws IOException
+    {
+        if ( waitFor( endOfLine, false ) )
+        {
+            return lastLine();
+        }
+        return null;
+    }
 
-	void reset() {
-		waitFor.clear();
-		if (timeout > 0) {
-			timeoutThread.interrupt();
-		}
-		alive = true;
-	}
+    private int read( byte[] data )
+        throws IOException
+    {
+        int length = 0;
 
-	static class Prompt {
-		private String prompt;
+        while ( alive )
+        {
+            if ( in.available() == 0 )
+            {
+                try
+                {
+                    Thread.sleep( 100 );
+                }
+                catch ( InterruptedException e )
+                {
 
-		private int pos;
+                }
+            }
+            else
+            {
+                length = in.read( data );
+                if ( length > 0 )
+                {
+                    break;
+                }
+            }
+        }
 
-		public Prompt(String prompt) {
-			this.prompt = prompt;
-			this.pos = 0;
-		}
+        return length;
+    }
 
-		public boolean matchChar(char c) {
-			return (prompt.charAt(pos) == c);
-		}
+    public int readFromStream( boolean readLineOnMatch )
+        throws IOException
+    {
+        int result = -1;
+        byte[] data = new byte[1];
+        int length = 0;
+        boolean readTillEndOfLine = false;
+        if ( timeout > 0 )
+        {
+            timeoutThread = new Thread()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        this.setName( "TimeOut" );
+                        sleep( timeout );
+                    }
+                    catch ( InterruptedException e )
+                    {
+                        return;
+                    }
+                    alive = false;
+                }
+            };
+            timeoutThread.start();
+        }
+        outer:
 
-		public boolean match() {
-			return pos + 1 == prompt.length();
-		}
+        while ( alive && ( length = read( data ) ) >= 0 )
+        {
 
-		public String getPrompt() {
-			return prompt;
-		}
+            for ( int x = 0; x < length; x++ )
+            {
+                char c = (char) data[x];
+                for ( StreamListener listener : streamListeners )
+                {
+                    listener.hasRead( (byte) data[x] );
+                }
+                if ( readTillEndOfLine && ( c == '\r' || c == '\n' ) )
+                    break outer;
 
-		public void nextPos() {
-			this.pos++;
-		}
+                int match = lookForMatch( c );
+                if ( match != -1 )
+                {
+                    result = match;
+                    if ( readLineOnMatch && ( c != '\r' && c != '\n' ) )
+                    {
+                        readTillEndOfLine = true;
+                    }
+                    else
+                    {
+                        break outer;
+                    }
+                }
+                else
+                {
+                    lookForResponse( (char) data[x] );
+                    lastChar = (char) data[x];
+                }
+            }
+        }
 
-		public void resetPos() {
-			this.pos = 0;
-		}
+        reset();
+        return result;
+    }
 
-	}
+    int lookForMatch( char s )
+    {
+        if ( s != '\r' && s != '\n' )
+            lastLine.append( s );
+        for ( int m = 0; alive && m < waitFor.size(); m++ )
+        {
+            Prompt prompt = (Prompt) waitFor.get( m );
+            if ( prompt.matchChar( s ) )
+            {
+                // the whole thing matched so, return the match answer
+                if ( prompt.match() )
+                {
+                    return m;
+                }
+                else
+                {
+                    prompt.nextPos();
+                }
 
-	static class Response extends Prompt {
-		private String response;
+            }
+            else
+            {
+                // if the current character did not match reset
+                prompt.resetPos();
+                if ( s == '\n' || s == '\r' )
+                {
+                    lastLine.setLength( 0 );
+                }
+            }
+        }
+        return -1;
+    }
 
-		public Response(String prompt, String response) {
-			super(prompt);
-			this.response = response;
-		}
+    void lookForResponse( char s )
+        throws IOException
+    {
+        for ( Response response : respondWith.values() )
+        {
+            if ( response.matchChar( s ) )
+            {
+                if ( response.match() )
+                {
+                    print( response.getResponse(), false );
+                    response.resetPos();
+                }
+                else
+                {
+                    response.nextPos();
+                }
+            }
+            else
+            {
+                response.resetPos();
+            }
+        }
+    }
 
-		public String getResponse() {
-			return response;
-		}
-	}
+    void reset()
+    {
+        waitFor.clear();
+        if ( timeout > 0 )
+        {
+            timeoutThread.interrupt();
+        }
+        alive = true;
+    }
+
+    static class Prompt
+    {
+        private String prompt;
+
+        private int pos;
+
+        public Prompt( String prompt )
+        {
+            this.prompt = prompt;
+            this.pos = 0;
+        }
+
+        public boolean matchChar( char c )
+        {
+            return ( prompt.charAt( pos ) == c );
+        }
+
+        public boolean match()
+        {
+            return pos + 1 == prompt.length();
+        }
+
+        public String getPrompt()
+        {
+            return prompt;
+        }
+
+        public void nextPos()
+        {
+            this.pos++;
+        }
+
+        public void resetPos()
+        {
+            this.pos = 0;
+        }
+
+    }
+
+    static class Response
+        extends Prompt
+    {
+        private String response;
+
+        public Response( String prompt, String response )
+        {
+            super( prompt );
+            this.response = response;
+        }
+
+        public String getResponse()
+        {
+            return response;
+        }
+    }
 
 }

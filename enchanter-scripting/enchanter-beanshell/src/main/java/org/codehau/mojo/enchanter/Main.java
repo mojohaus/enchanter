@@ -12,7 +12,8 @@ import bsh.Interpreter;
 /**
  * Executes the passed script using Beanshell
  */
-public class Main {
+public class Main
+{
 
     /**
      * @param args
@@ -21,23 +22,25 @@ public class Main {
      * @throws FileNotFoundException 
      * @throws BSFException
      */
-    public static void main(String[] args) throws EvalError, FileNotFoundException, IOException {
+    public static void main( String[] args )
+        throws EvalError, FileNotFoundException, IOException
+    {
         ScriptRecorder rec = new BeanShellScriptRecorder();
-        
-        args = rec.processForLearningMode(args);
+
+        args = rec.processForLearningMode( args );
 
         String filePath = args[0];
 
         DefaultStreamConnection streamConnection = new DefaultStreamConnection();
-        
+
         Interpreter i = new Interpreter();
-        
+
         // deprecated
-        i.set("ssh", streamConnection);
-        
-        i.set("conn", streamConnection);
-        i.set("args", args);
-        i.source(filePath);
+        i.set( "ssh", streamConnection );
+
+        i.set( "conn", streamConnection );
+        i.set( "args", args );
+        i.source( filePath );
     }
 
 }
