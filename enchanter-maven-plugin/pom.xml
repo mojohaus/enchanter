@@ -37,7 +37,6 @@
   <name>Enchanter Maven Plugin</name>
   
   <description>Use this plugin to run Enchanter's script using python, ruby, beanshell</description>
-  <url>http://mojo.codehaus.org/syslog-maven-plugin/</url>
   
   <inceptionYear>2010</inceptionYear>
 
