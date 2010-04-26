@@ -1,4 +1,4 @@
-package org.codehau.mojo.enchanter;
+package org.codehau.mojo.enchanter.python;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more contributor license

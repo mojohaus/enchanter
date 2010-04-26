@@ -15,6 +15,8 @@ package org.codehaus.mojo.enchanter;
  * the License.
  */
 
+import java.io.File;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 
@@ -29,5 +31,31 @@ public abstract class AbstractEnchanterMojo
      * @since 1.0-beta-1
      */
     protected MavenProject project;
-
+    
+    
+    /**
+     * Shell type. Acceptable values are telnet,ssh
+     * 
+     * @parameter expression="${shellType}" default-value="telnet"
+     * @since 1.0-beta-1
+     */
+    protected String shellType;
+    
+    /**
+     * Script type. Acceptable values are ruby, python, and beanshell
+     * 
+     * @parameter expression="${scriptType}" default-value="ruby"
+     * @since 1.0-beta-1
+     */
+    protected String scriptType;
+    
+    /**
+     * Script type. Acceptable values are ruby, python, and beanshell
+     * 
+     * @parameter expression="${script}" default-value="ruby"
+     * @since 1.0-beta-1
+     * @required
+     */
+    protected File script;
+    
 }

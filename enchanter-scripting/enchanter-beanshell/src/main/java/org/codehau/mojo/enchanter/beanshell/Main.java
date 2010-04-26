@@ -1,4 +1,4 @@
-package org.codehau.mojo.enchanter;
+package org.codehau.mojo.enchanter.beanshell;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
@@ -15,37 +15,47 @@ package org.codehau.mojo.enchanter;
  * the License.
  */
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.codehaus.mojo.enchanter.ScriptRecorder;
-import org.codehaus.mojo.enchanter.StreamConnection;
 import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
-import org.python.util.PythonInterpreter;
+
+import bsh.EvalError;
+import bsh.Interpreter;
 
 /**
- * Executes the passed script using Python
+ * Executes the passed script using Beanshell
  */
 public class Main
 {
 
+    /**
+     * @param args
+     * @throws EvalError 
+     * @throws IOException 
+     * @throws FileNotFoundException 
+     * @throws BSFException
+     */
     public static void main( String[] args )
-        throws IOException
+        throws EvalError, FileNotFoundException, IOException
     {
-        ScriptRecorder rec = new PythonScriptRecorder();
+        ScriptRecorder rec = new BeanShellScriptRecorder();
 
         args = rec.processForLearningMode( args );
 
         String filePath = args[0];
 
-        PythonInterpreter interp = new PythonInterpreter();
-        StreamConnection conn = new DefaultStreamConnection();
+        DefaultStreamConnection streamConnection = new DefaultStreamConnection();
+
+        Interpreter i = new Interpreter();
 
         // deprecated
-        interp.set( "ssh", conn );
-        interp.set( "conn", conn );
-        interp.set( "args", args );
-        interp.execfile( filePath );
+        i.set( "ssh", streamConnection );
 
+        i.set( "conn", streamConnection );
+        i.set( "args", args );
+        i.source( filePath );
     }
 
 }
