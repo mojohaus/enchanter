@@ -34,23 +34,43 @@ public abstract class AbstractEnchanterMojo
     
     
     /**
-     * Shell type. Acceptable values are telnet,ssh
+     * Shell type. Acceptable values are telnet and ssh
      * 
-     * @parameter expression="${shellType}" default-value="telnet"
+     * @parameter expression="${connectionType}" default-value="telnet"
+     * @required
      * @since 1.0-beta-1
      */
-    protected String shellType;
-    
+    protected String connectionType;
+
     /**
-     * Script type. Acceptable values are ruby, python, and beanshell
+     * Connection user name to login to remote system
      * 
-     * @parameter expression="${scriptType}" default-value="ruby"
+     * @parameter expression="${hostname}" 
+     * @required
      * @since 1.0-beta-1
      */
-    protected String scriptType;
+    protected String hostname;
     
     /**
-     * Script type. Acceptable values are ruby, python, and beanshell
+     * Connection user name to login to remote system
+     * 
+     * @parameter expression="${username}" default-value="${os.username}"
+     * @required
+     * @since 1.0-beta-1
+     */
+    protected String username;
+    
+    /**
+     * Connection password to login to remote system
+     * 
+     * @parameter expression="${password}" default-value=""
+     * @required
+     * @since 1.0-beta-1
+     */
+    protected String password;
+    
+    /**
+     * Script type. 
      * 
      * @parameter expression="${script}" default-value="ruby"
      * @since 1.0-beta-1
