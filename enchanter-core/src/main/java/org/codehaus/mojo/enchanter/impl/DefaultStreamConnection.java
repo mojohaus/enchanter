@@ -52,7 +52,11 @@ public class DefaultStreamConnection
 
     public DefaultStreamConnection()
     {
-        this.connectionLibrary = new GanymedSSHLibrary();
+    }
+
+    public DefaultStreamConnection( ConnectionLibrary connLib )
+    {
+        this.connectionLibrary = connLib;
     }
 
     public void connect( String host )
