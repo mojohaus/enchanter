@@ -92,17 +92,17 @@
       <dependency>
         <groupId>org.python</groupId>
         <artifactId>jython</artifactId>
-        <version>2.5</version>
+        <version>2.2.1</version>
       </dependency>
 
       <dependency>
         <groupId>org.jruby</groupId>
         <artifactId>jruby</artifactId>
-        <version>1.5.0.RC1</version>
+        <version>1.5.1</version>
       </dependency>
 
       <dependency>
-        <groupId>org.beanshel</groupId>
+        <groupId>org.beanshell</groupId>
         <artifactId>bsh</artifactId>
         <version>2.0b4</version>
       </dependency>
@@ -117,6 +117,7 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>3.8.1</version>
+        
       </dependency>
       
       <dependency>
@@ -143,7 +144,6 @@
   
   <modules>
     <module>enchanter-core</module>
-    <module>enchanter-scripting</module>
     <module>enchanter-maven-plugin</module>
   </modules>
 

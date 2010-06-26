@@ -103,11 +103,9 @@ public abstract class AbstractEnchanterMojo
     protected ScriptEngine getScriptEngine( File script )
         throws MojoExecutionException
     {
-        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-
         String scriptType = getEngineType( script );
         
-        ScriptEngine engine = scriptEngineManager.getEngineByName( scriptType );
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName( scriptType );
         
         if ( engine == null )
         {

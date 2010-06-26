@@ -15,9 +15,8 @@
   
   <dependencies>
     <dependency>
-      <groupId>jython</groupId>
+      <groupId>org.python</groupId>
        <artifactId>jython</artifactId>
-       <version>2.1</version>
     </dependency>
   </dependencies>
   

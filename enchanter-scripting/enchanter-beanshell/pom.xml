@@ -14,9 +14,8 @@
   
   <dependencies>
     <dependency>
-      <groupId>bsh</groupId>
-        <artifactId>bsh</artifactId>
-        <version>1.3.0</version>
+      <groupId>org.beanshell</groupId>
+      <artifactId>bsh</artifactId>
     </dependency>
   </dependencies>
   

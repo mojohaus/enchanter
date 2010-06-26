@@ -56,16 +56,18 @@
     </dependency>
     
     <dependency>
-      <groupId>org.codehaus.mojo.enchanter</groupId>
-      <artifactId>enchanter-ruby</artifactId>
+      <groupId>org.python</groupId>
+      <artifactId>jython</artifactId>
     </dependency>
+
     <dependency>
-      <groupId>org.codehaus.mojo.enchanter</groupId>
-      <artifactId>enchanter-python</artifactId>
+      <groupId>org.jruby</groupId>
+      <artifactId>jruby</artifactId>
     </dependency>
+
     <dependency>
-      <groupId>org.codehaus.mojo.enchanter</groupId>
-      <artifactId>enchanter-beanshell</artifactId>
+      <groupId>org.beanshell</groupId>
+      <artifactId>bsh</artifactId>
     </dependency>
 
 <!-- 
