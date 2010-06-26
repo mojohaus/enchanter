@@ -72,8 +72,9 @@ public class EnchanterScriptingMojo
             ScriptEngine engine = this.getScriptEngine();
 
             stream = this.getStreamConnection();
+            stream.setDebug( true );
             
-            engine.put( "stream", stream );
+            engine.put( "conn", stream );
             engine.put( "host", this.host );
             engine.put( "username", this.username );
             engine.put( "password", this.password );

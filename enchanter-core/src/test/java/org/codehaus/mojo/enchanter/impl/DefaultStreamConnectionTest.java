@@ -26,9 +26,9 @@ public class DefaultStreamConnectionTest
     extends TestCase
 {
 
-    DefaultStreamConnection ssh;
+    DefaultStreamConnection conn;
 
-    StubConnectionLibrary conn;
+    StubConnectionLibrary lib;
 
     public DefaultStreamConnectionTest( String arg0 )
     {
@@ -39,10 +39,10 @@ public class DefaultStreamConnectionTest
         throws Exception
     {
         super.setUp();
-        ssh = new DefaultStreamConnection();
-        conn = new StubConnectionLibrary();
-        ssh.setConnectionLibrary( conn );
-        ssh.connect( "host", "username" );
+        conn = new DefaultStreamConnection();
+        lib = new StubConnectionLibrary();
+        conn.setConnectionLibrary( lib );
+        conn.connect( "host", "username" );
     }
 
     protected void tearDown()
@@ -54,100 +54,103 @@ public class DefaultStreamConnectionTest
     public void testSend()
         throws IOException
     {
-        ssh.send( "foo" );
-        assertEquals( "foo", conn.dumpOut() );
+        conn.send( "foo" );
+        assertEquals( "foo", lib.dumpOut() );
 
-        ssh.connect( null, null );
-        ssh.send( "foo^C" );
-        assertEquals( "foo" + ( (char) 3 ), conn.dumpOut() );
+        conn.connect( null, null );
+        conn.send( "foo^C" );
+        assertEquals( "foo" + ( (char) 3 ), lib.dumpOut() );
 
-        ssh.connect( null, null );
-        ssh.send( "foo^M" );
-        assertEquals( "foo\r\n", conn.dumpOut() );
+        conn.connect( null, null );
+        conn.send( "foo^M" );
+        assertEquals( "foo\r\n", lib.dumpOut() );
     }
 
     public void testSendLine()
         throws IOException
     {
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\n".getBytes() ) );
-        ssh.connect( null, null );
-        ssh.sendLine( "foo" );
-        assertEquals( "foo\r\n", conn.dumpOut() );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\n".getBytes() ) );
+        conn.connect( null, null );
+        conn.sendLine( "foo" );
+        assertEquals( "foo\r\n", lib.dumpOut() );
     }
 
     public void testSleep()
         throws InterruptedException
     {
         long start = System.currentTimeMillis();
-        ssh.sleep( 500 );
-        assertTrue( System.currentTimeMillis() >= start + 500 );
+        int sleepTime = 100;
+        conn.sleep( sleepTime );
+        long now = System.currentTimeMillis() + 1; //not very precise sleep
+        long diff = now - ( start + sleepTime );
+        assertTrue( "" + now + " not >= " + start + sleepTime + " diff is: " + diff, diff >= 0 );
     }
 
     public void testWaitForStringBoolean()
         throws IOException
     {
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
-        ssh.connect( null, null );
-        assertTrue( ssh.waitFor( "bar", false ) );
-        assertTrue( ssh.waitFor( "jo", false ) );
-        assertFalse( ssh.waitFor( "asdf", false ) );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
+        conn.connect( null, null );
+        assertTrue( conn.waitFor( "bar", false ) );
+        assertTrue( conn.waitFor( "jo", false ) );
+        assertFalse( conn.waitFor( "asdf", false ) );
 
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
-        ssh.connect( null, null );
-        assertTrue( ssh.waitFor( "bar", true ) );
-        assertTrue( ssh.waitFor( "jo", true ) );
-        assertFalse( ssh.waitFor( "asdf", true ) );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
+        conn.connect( null, null );
+        assertTrue( conn.waitFor( "bar", true ) );
+        assertTrue( conn.waitFor( "jo", true ) );
+        assertFalse( conn.waitFor( "asdf", true ) );
     }
 
     public void testWaitForWithRespond()
         throws IOException
     {
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
-        ssh.connect( null, null );
-        ssh.respond( "bar", "jim" );
-        assertTrue( ssh.waitFor( "oo", false ) );
-        assertEquals( "foo", ssh.lastLine() );
-        assertTrue( ssh.waitFor( "jo", false ) );
-        assertFalse( ssh.waitFor( "asdf", false ) );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
+        conn.connect( null, null );
+        conn.respond( "bar", "jim" );
+        assertTrue( conn.waitFor( "oo", false ) );
+        assertEquals( "foo", conn.lastLine() );
+        assertTrue( conn.waitFor( "jo", false ) );
+        assertFalse( conn.waitFor( "asdf", false ) );
 
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
-        ssh.connect( null, null );
-        assertTrue( ssh.waitFor( "bar", true ) );
-        assertTrue( ssh.waitFor( "jo", true ) );
-        assertFalse( ssh.waitFor( "asdf", true ) );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
+        conn.connect( null, null );
+        assertTrue( conn.waitFor( "bar", true ) );
+        assertTrue( conn.waitFor( "jo", true ) );
+        assertFalse( conn.waitFor( "asdf", true ) );
     }
 
     public void testWaitForMuxStringArrayBoolean()
         throws IOException
     {
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
-        ssh.connect( null, null );
-        assertEquals( 1, ssh.waitForMux( "bsar", "bar" ) );
-        assertEquals( 0, ssh.waitForMux( "jo", "fdo" ) );
-        assertEquals( -1, ssh.waitForMux( "asdf" ) );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
+        conn.connect( null, null );
+        assertEquals( 1, conn.waitForMux( "bsar", "bar" ) );
+        assertEquals( 0, conn.waitForMux( "jo", "fdo" ) );
+        assertEquals( -1, conn.waitForMux( "asdf" ) );
 
     }
 
     public void testLastLine()
         throws IOException
     {
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
-        ssh.connect( null, null );
-        ssh.waitFor( "bar" );
-        assertEquals( "bar", ssh.lastLine() );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
+        conn.connect( null, null );
+        conn.waitFor( "bar" );
+        assertEquals( "bar", conn.lastLine() );
 
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
-        ssh.connect( null, null );
-        ssh.waitFor( "bar", true );
-        assertEquals( "bar ds", ssh.lastLine() );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
+        conn.connect( null, null );
+        conn.waitFor( "bar", true );
+        assertEquals( "bar ds", conn.lastLine() );
     }
 
     public void testGetLine()
         throws IOException
     {
-        conn.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
-        ssh.connect( null, null );
-        assertEquals( "foo", ssh.getLine() );
+        lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
+        conn.connect( null, null );
+        assertEquals( "foo", conn.getLine() );
     }
 
 }
