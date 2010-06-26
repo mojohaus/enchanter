@@ -15,82 +15,108 @@ package org.codehaus.mojo.enchanter;
  * the License.
  */
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
-import org.codehaus.mojo.enchanter.impl.GanymedSSHLibrary;
-import org.codehaus.mojo.enchanter.impl.TelnetConnectionLibrary;
-import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
 
 /**
  * Run Enchanter script using any any dynamic supported language ( ie ruby, javascript, python, groovy, beanshel, etc )
  * @goal run
- * @requiresProject true
+ * @requiresProject false
  */
 
-@SuppressWarnings("restriction")
 public class EnchanterScriptingMojo
     extends AbstractEnchanterMojo
 {
 
+    /**
+     * Script path. 
+     * 
+     * @parameter expression="${enchanter.src}" 
+     * @since 1.0-beta-1
+     */
+    protected File src;
+
+    /**
+     * List of files containing SQL statements to load.
+     * @since 1.0
+     * @parameter
+     */
+    private List<File> srcFiles = new ArrayList<File>();
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        DefaultStreamConnection stream = new DefaultStreamConnection();
 
-        ConnectionLibrary conn = this.createConnection( this.connectionType );
-        stream.setConnectionLibrary( conn );
+        srcFiles.add( 0, src );
         
-        ScriptEngine scriptEngine = this.createScriptingEngine();
+        if ( srcFiles.isEmpty() )
+        {
+            this.getLog().warn( "No script(s) to run" );
+            return;
+        }
+
+        Reader reader = null;
+        StreamConnection stream = null;
 
         try
         {
-            scriptEngine.put( "STREAM", stream );
-            scriptEngine.eval( script.getAbsolutePath() );
+            ScriptEngine engine = this.getScriptEngine();
 
+            stream = this.getStreamConnection();
+            
+            engine.put( "stream", stream );
+            engine.put( "host", this.host );
+            engine.put( "username", this.username );
+            engine.put( "password", this.password );
+
+            for ( File script: srcFiles )
+            {
+                reader = new FileReader( script );
+                engine.eval( reader );
+                IOUtil.close( reader );
+                reader = null;
+            }
         }
-        catch ( ScriptException e )
+        catch ( Exception e )
         {
-            throw new MojoExecutionException( "Error detected: ", e );
+            throw new MojoExecutionException( "Error in script execution.", e );
         }
         finally
         {
-            if ( conn != null )
+            IOUtil.close( reader );
+            
+            if ( stream != null )
             {
                 try
                 {
-                    conn.disconnect();
+                    stream.disconnect();
                 }
                 catch ( Exception e )
                 {
+
                 }
             }
-        }        
-    }
-    
-    private ScriptEngine createScriptingEngine()
-    {
-        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-        return scriptEngineManager.getEngineByExtension( FileUtils.extension( this.script.getName() ) );
-    }
-    
-    private ConnectionLibrary createConnection( String connectionType )
-        throws MojoExecutionException, MojoFailureException
-    {
-        if ( "telnet".equals( connectionType ) )
-        {
-            return new TelnetConnectionLibrary();
         }
-        else if ( "ssh".equals( connectionType ) )
+    }
+
+    protected ScriptEngine getScriptEngine()
+        throws MojoExecutionException
+    {
+        if ( ! this.srcFiles.isEmpty() )
         {
-            return new GanymedSSHLibrary();
+            return this.getScriptEngine( this.srcFiles.get( 0 ) );
         }
-        
-        throw new MojoFailureException( "Unknown connection type: " + this.connectionType );
+
+        return null;
     }
 
 }

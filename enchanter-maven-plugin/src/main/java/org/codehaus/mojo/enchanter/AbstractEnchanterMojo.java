@@ -16,7 +16,6 @@ package org.codehaus.mojo.enchanter;
  */
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -43,7 +42,7 @@ public abstract class AbstractEnchanterMojo
     /**
      * Shell type. Acceptable values are telnet and ssh
      * 
-     * @parameter expression="${connectionType}" default-value="telnet"
+     * @parameter expression="${enchanter.type}" default-value="telnet"
      * @required
      * @since 1.0-beta-1
      */
@@ -52,16 +51,16 @@ public abstract class AbstractEnchanterMojo
     /**
      * Connection user name to login to remote system
      * 
-     * @parameter expression="${hostname}" 
+     * @parameter expression="${enchanter.host}" default-value="localhost"
      * @required
      * @since 1.0-beta-1
      */
-    protected String hostname;
+    protected String host;
 
     /**
      * Connection user name to login to remote system
      * 
-     * @parameter expression="${username}" default-value="${os.username}"
+     * @parameter expression="${enchanter.username}" default-value="${os.username}"
      * @required
      * @since 1.0-beta-1
      */
@@ -70,34 +69,52 @@ public abstract class AbstractEnchanterMojo
     /**
      * Connection password to login to remote system
      * 
-     * @parameter expression="${password}" default-value=""
+     * @parameter expression="${enchanter.password}" default-value=""
      * @required
      * @since 1.0-beta-1
      */
     protected String password;
 
-    /**
-     * Scriptable engine type( ie ruby, javascript, groovy, python, etc )
-     * @parameter expression="${type}
-     * @required
-     * @since 1.0-beta-1
-     */
-    private String type;
 
-    /**
-     * Script path. 
-     * 
-     * @parameter expression="${script}" 
-     * @since 1.0-beta-1
-     * @required
-     */
-    protected File script;
-
-    protected ScriptEngine getScriptEngine()
+    protected String getEngineType( File script )
+        throws MojoExecutionException
+    {
+        String fileName = script.getName();
+        
+        if ( fileName.endsWith( ".rb" ) )
+        {
+            return "ruby";
+        }
+        
+        if ( fileName.endsWith( ".py" ) )
+        {
+            return "python";
+        }
+        
+        if ( fileName.endsWith( ".bsh" ) )
+        {
+            return "beanshell";
+        }
+        
+        throw new MojoExecutionException( "Unknown script type in " + fileName );
+        
+    }
+    
+    protected ScriptEngine getScriptEngine( File script )
+        throws MojoExecutionException
     {
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 
-        return scriptEngineManager.getEngineByName( type );
+        String scriptType = getEngineType( script );
+        
+        ScriptEngine engine = scriptEngineManager.getEngineByName( scriptType );
+        
+        if ( engine == null )
+        {
+            throw new MojoExecutionException( "Engine not found: " + scriptType );
+        }
+        
+        return engine;
     }
 
     protected StreamConnection getStreamConnection()
@@ -107,7 +124,7 @@ public abstract class AbstractEnchanterMojo
         {
             return createSshStreamConnection();
         }
-        else if ( "ssh".equals( this.connectionType ) )
+        else if ( "telnet".equals( this.connectionType ) )
         {
             return createTelnetStreamConnection();
         }
