@@ -16,9 +16,17 @@ package org.codehaus.mojo.enchanter;
  */
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
+import org.codehaus.mojo.enchanter.impl.GanymedSSHLibrary;
+import org.codehaus.mojo.enchanter.impl.TelnetConnectionLibrary;
 
 public abstract class AbstractEnchanterMojo
     extends AbstractMojo
@@ -31,8 +39,7 @@ public abstract class AbstractEnchanterMojo
      * @since 1.0-beta-1
      */
     protected MavenProject project;
-    
-    
+
     /**
      * Shell type. Acceptable values are telnet and ssh
      * 
@@ -50,7 +57,7 @@ public abstract class AbstractEnchanterMojo
      * @since 1.0-beta-1
      */
     protected String hostname;
-    
+
     /**
      * Connection user name to login to remote system
      * 
@@ -59,7 +66,7 @@ public abstract class AbstractEnchanterMojo
      * @since 1.0-beta-1
      */
     protected String username;
-    
+
     /**
      * Connection password to login to remote system
      * 
@@ -68,14 +75,63 @@ public abstract class AbstractEnchanterMojo
      * @since 1.0-beta-1
      */
     protected String password;
-    
+
     /**
-     * Script type. 
+     * Scriptable engine type( ie ruby, javascript, groovy, python, etc )
+     * @parameter expression="${type}
+     * @required
+     * @since 1.0-beta-1
+     */
+    private String type;
+
+    /**
+     * Script path. 
      * 
-     * @parameter expression="${script}" default-value="ruby"
+     * @parameter expression="${script}" 
      * @since 1.0-beta-1
      * @required
      */
     protected File script;
-    
+
+    protected ScriptEngine getScriptEngine()
+    {
+        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+
+        return scriptEngineManager.getEngineByName( type );
+    }
+
+    protected StreamConnection getStreamConnection()
+        throws MojoExecutionException
+    {
+        if ( "ssh".equals( this.connectionType ) )
+        {
+            return createSshStreamConnection();
+        }
+        else if ( "ssh".equals( this.connectionType ) )
+        {
+            return createTelnetStreamConnection();
+        }
+        else
+        {
+            throw new MojoExecutionException( "Invalid connection type: " + connectionType );
+        }
+
+    }
+
+    private StreamConnection createTelnetStreamConnection( )
+    {
+        DefaultStreamConnection streamConnection = new DefaultStreamConnection();
+        TelnetConnectionLibrary connLib = new TelnetConnectionLibrary();
+        streamConnection.setConnectionLibrary( connLib );
+        return streamConnection;
+    }
+
+    private StreamConnection createSshStreamConnection( )
+    {
+        DefaultStreamConnection streamConnection = new DefaultStreamConnection();
+        GanymedSSHLibrary connLib = new GanymedSSHLibrary();
+        streamConnection.setConnectionLibrary( connLib );
+        return streamConnection;
+    }
+
 }

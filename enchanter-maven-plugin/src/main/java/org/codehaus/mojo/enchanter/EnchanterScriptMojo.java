@@ -15,24 +15,57 @@ package org.codehaus.mojo.enchanter;
  * the License.
  */
 
+import java.io.FileReader;
+import java.io.Reader;
+
+import javax.script.ScriptEngine;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
- * Run Enchanter using ruby
- * @goal enchanter-ruby
+ * Run Enchanter with a script
+ * @goal enchanter
  * @requiresProject false
  */
 
-public class EnchanterRubyMojo
+public class EnchanterScriptMojo
     extends AbstractEnchanterMojo
 {
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        // TODO Auto-generated method stub
-
+        Reader reader = null; 
+        StreamConnection stream = null; 
+        
+        try 
+        {
+            ScriptEngine engine =  this.getScriptEngine();
+            
+            stream = this.getStreamConnection();
+            engine.put( "STREAM", stream );
+            
+            reader = new FileReader( script );
+            engine.eval( reader );
+        }
+        catch ( Exception e )
+        {
+            throw new MojoExecutionException( "Error in script execution.", e );
+        }
+        finally
+        {
+            if ( stream != null )
+            {
+                try
+                {
+                    stream.disconnect();
+                }
+                catch ( Exception e )
+                {
+                    
+                }
+            }
+        }
     }
-
 }
