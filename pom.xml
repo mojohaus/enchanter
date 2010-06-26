@@ -37,9 +37,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/enchanter</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/enchanter</developerConnection>
-    <url>http://svn.codehaus.org/mojo/trunk/enchanter</url>
+    <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/sandbox/enchanter</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/sandbox/enchanter</developerConnection>
+    <url>http://svn.codehaus.org/mojo/trunk/sandbox/enchanter</url>
   </scm>
 
 
@@ -156,8 +156,8 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
-            <source>1.5</source>
-            <target>1.5</target>
+            <source>1.6</source>
+            <target>1.6</target>
           </configuration>
         </plugin>
         <plugin>
@@ -187,7 +187,7 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>[1.5,)</version>
+                  <version>[1.6,)</version>
                 </requireJavaVersion>
                 <requireMavenVersion>
                   <version>[2.2.1,)</version>
