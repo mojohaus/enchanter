@@ -24,8 +24,6 @@ public class DefaultStreamConnection
     implements StreamConnection
 {
 
-    private final static int DEFAULT_TIMEOUT = 30000;
-
     private BufferedInputStream in;
 
     private PrintWriter out;
