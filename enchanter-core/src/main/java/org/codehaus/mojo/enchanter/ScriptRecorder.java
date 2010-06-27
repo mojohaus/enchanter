@@ -15,19 +15,15 @@ package org.codehaus.mojo.enchanter;
  * the License.
  */
 
-import jargs.gnu.CmdLineParser;
-import jargs.gnu.CmdLineParser.Option;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
-
 /**
  * Stream reader that helps create a script.  Meant to be subclassed by scripting
  * engine-dependent modules
+ * This class is current not supported
  */
 public class ScriptRecorder
     implements StreamListener
@@ -62,6 +58,7 @@ public class ScriptRecorder
     public String[] processForLearningMode( String[] args )
         throws IOException
     {
+        /*
         CmdLineParser parser = new CmdLineParser();
         Option optLearn = parser.addBooleanOption( 'l', "learn" );
         Option optHost = parser.addStringOption( 'h', "host" );
@@ -106,8 +103,12 @@ public class ScriptRecorder
             endRecording();
             System.exit( 0 );
         }
-
+        
+        
         return parser.getRemainingArgs();
+        */
+        
+        return null;
     }
 
     protected void endRecording()
