@@ -26,6 +26,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
 import org.codehaus.mojo.enchanter.impl.GanymedSSHLibrary;
 import org.codehaus.mojo.enchanter.impl.TelnetConnectionLibrary;
+import org.codehaus.plexus.util.FileUtils;
 
 public abstract class AbstractEnchanterMojo
     extends AbstractMojo
@@ -75,41 +76,17 @@ public abstract class AbstractEnchanterMojo
      */
     protected String password;
 
-
-    protected String getEngineType( File script )
-        throws MojoExecutionException
-    {
-        String fileName = script.getName();
-        
-        if ( fileName.endsWith( ".rb" ) )
-        {
-            return "ruby";
-        }
-        
-        if ( fileName.endsWith( ".py" ) )
-        {
-            return "python";
-        }
-        
-        if ( fileName.endsWith( ".bsh" ) )
-        {
-            return "beanshell";
-        }
-        
-        throw new MojoExecutionException( "Unknown script type in " + fileName );
-        
-    }
     
     protected ScriptEngine getScriptEngine( File script )
         throws MojoExecutionException
     {
-        String scriptType = getEngineType( script );
+        String fileExt = FileUtils.getExtension( script.getName() );
         
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName( scriptType );
+        ScriptEngine engine = new ScriptEngineManager().getEngineByExtension( fileExt );
         
         if ( engine == null )
         {
-            throw new MojoExecutionException( "Engine not found: " + scriptType );
+            throw new MojoExecutionException( "Scripting engine not found for: " + script );
         }
         
         return engine;
