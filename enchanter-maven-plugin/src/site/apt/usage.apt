@@ -1,0 +1,92 @@
+ ------
+ Usage
+ ------
+ Dan T. Tran
+ ------
+ 2010-06-30
+ ------
+
+Usage
+
+  Before executing your script, Enchanter plugin prepares 4 scripting variables using plugin's configuration
+  
+*-----------------+-------------------------------------------------------+
+| Variable        | Description
+*-----------------+-------------------------------------------------------+
+| conn            | Enchanter's StreamConnection object        
+*-----------------+-------------------------------------------------------+
+| host            | Target host        
+*-----------------+-------------------------------------------------------+
+| username        | Target's host username         
+*-----------------+-------------------------------------------------------+
+| password        | Target's host password      
+*-----------------+-------------------------------------------------------+
+
+  
+*  Common commands for the 'conn' variable
+
+*--------------------+-------------------------------------------------------+
+| Method             | Description
+*--------------------+-------------------------------------------------------+
+| connect(host, ...) | Connects to the remote server        
+*--------------------+-------------------------------------------------------+
+| disconnect()	     | Disconnects from the remote server          
+*--------------------+-------------------------------------------------------+
+| waitFor(prompt)	 | Waits for the text and returns true if found                 
+*--------------------+-------------------------------------------------------+
+| waitForMux(promptList) |	Waits for multiple prompts and returns the index of the first match       
+*--------------------+-------------------------------------------------------+
+| sleep(millis)	     | Sleeps for the given number of milliseconds(prompt)	                 
+*--------------------+-------------------------------------------------------+
+| setTimeout(millis) |	Sets the timeout for all commands that wait for prompts(prompt)	                 
+*--------------------+-------------------------------------------------------+
+| send(text)	     | Sends the text to the server(prompt)	                 
+*--------------------+-------------------------------------------------------+
+| sendLine(text)	 | Sends the text to the server with the end of line markers(prompt)	                 
+*--------------------+-------------------------------------------------------+
+| setDebug(flag)	 | Dump stream data to console	                 
+*--------------------+-------------------------------------------------------+
+
+  For a full list of commands, see the {{{../enchanter-core/apidocs}StreamConnection interface}}   
+  
+* Command line usage to execute a single script
+
+---------------------
+
+mvn enchanter:run -Denchanter.src=/path/to/single/script -Denchanter.username=some-user-name \
+   -Denchanter.password=a-password -Denchanter.host=a-host -Denchanter.connectonType=telnet
+
+---------------------
+
+* Maven project file to execute multiple scripts
+
+
+------------------------------------
+
+  [...]
+  <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>enchanter-maven-plugin</artifactId>
+    <version>1.0-beta-1-SNAPSHOT</version>
+    <executions>
+      <execution>
+        <goals>
+          <goal>generic-upgrade</goal>
+        </goals>
+        <configuration>
+          <srcFiles>
+            <srcFile>path/to/a/script</srcFile>
+            [...]
+          </srcFiles>
+          <connectionType>ssh</connnectionType>
+          <username>a-user-id</username>
+          <password>a-password</password>
+          <host>a-host</host>
+        </configuration>
+      <execution>
+    </executions>
+  </plugin>
+  [...]
+  
+---------------------
+

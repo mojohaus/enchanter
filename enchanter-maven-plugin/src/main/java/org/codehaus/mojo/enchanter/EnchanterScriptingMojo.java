@@ -26,6 +26,7 @@ import javax.script.ScriptEngine;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Run Enchanter script using any any dynamic supported language ( ie ruby, javascript, python, groovy, beanshel, etc )
@@ -38,7 +39,7 @@ public class EnchanterScriptingMojo
 {
 
     /**
-     * Script path. 
+     * Script path. Its file extension determine the scripting execution type ( ie .rb is ruby )
      * 
      * @parameter expression="${enchanter.src}" 
      * @since 1.0-beta-1
@@ -46,8 +47,9 @@ public class EnchanterScriptingMojo
     protected File src;
 
     /**
-     * List of files containing SQL statements to load.
-     * @since 1.0
+     * List of files containing SQL statements to load. Its file extension determine the scripting execution type ( ie .rb is ruby )
+     * Missing script types are not allowed
+     * @since 1.0-beta-1
      * @parameter
      */
     private List<File> srcFiles = new ArrayList<File>();
@@ -55,9 +57,11 @@ public class EnchanterScriptingMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
+        if ( src != null )
+        {
+            srcFiles.add( 0, src );
+        }
 
-        srcFiles.add( 0, src );
-        
         if ( srcFiles.isEmpty() )
         {
             this.getLog().warn( "No script(s) to run" );
@@ -73,13 +77,13 @@ public class EnchanterScriptingMojo
 
             stream = this.getStreamConnection();
             stream.setDebug( true );
-            
+
             engine.put( "conn", stream );
             engine.put( "host", this.host );
             engine.put( "username", this.username );
             engine.put( "password", this.password );
 
-            for ( File script: srcFiles )
+            for ( File script : srcFiles )
             {
                 reader = new FileReader( script );
                 engine.eval( reader );
@@ -94,7 +98,7 @@ public class EnchanterScriptingMojo
         finally
         {
             IOUtil.close( reader );
-            
+
             if ( stream != null )
             {
                 try
@@ -112,7 +116,7 @@ public class EnchanterScriptingMojo
     protected ScriptEngine getScriptEngine()
         throws MojoExecutionException
     {
-        if ( ! this.srcFiles.isEmpty() )
+        if ( !this.srcFiles.isEmpty() )
         {
             return this.getScriptEngine( this.srcFiles.get( 0 ) );
         }
