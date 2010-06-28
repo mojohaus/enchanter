@@ -51,9 +51,9 @@
         
         <configuration>
           <settingsKey>lmi</settingsKey>
-          <scripts>
-            <script>${project.basedir}/src/main/script/TelnetLogin.py</script>
-          </scripts>
+          <files>
+            <file>${project.basedir}/src/main/script/TelnetLogin.py</file>
+          </files>
         </configuration>
         
         <executions>

@@ -36,12 +36,12 @@ public class EnchanterScriptingMojo
 {
 
     /**
-     * List of scripts files run. The first file in the list determines scripting engine type ( ie .rb is ruby )
-     * Mixing scripting types are not allowed
+     * List of scripts files to run. The first file's extension in the list determines scripting engine type ( ie .rb is ruby )
+     * Mixing scripting types are not allowed.
      * @since 1.0-beta-1
      * @parameter
      */
-    private File [] scripts = new File[0];
+    private File [] files = new File[0];
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
@@ -49,9 +49,9 @@ public class EnchanterScriptingMojo
         
         loadUserInfoFromSettings();
 
-        if ( scripts.length == 0 )
+        if ( files.length == 0 )
         {
-            this.getLog().warn( "No script(s) to run" );
+            this.getLog().warn( "No script to run" );
             return;
         }
 
@@ -70,7 +70,7 @@ public class EnchanterScriptingMojo
             engine.put( "username", this.username );
             engine.put( "password", this.password );
 
-            for ( File script : scripts )
+            for ( File script : files )
             {
                 reader = new FileReader( script );
                 engine.eval( reader );
@@ -103,9 +103,9 @@ public class EnchanterScriptingMojo
     protected ScriptEngine getScriptEngine()
         throws MojoExecutionException
     {
-        if ( this.scripts.length != 0  )
+        if ( this.files.length != 0  )
         {
-            return this.getScriptEngine( this.scripts[0] );
+            return this.getScriptEngine( this.files[0] );
         }
 
         return null;

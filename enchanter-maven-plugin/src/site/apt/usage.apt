@@ -15,11 +15,11 @@ Usage
 *-----------------+-------------------------------------------------------+
 | conn            | Enchanter's StreamConnection object        
 *-----------------+-------------------------------------------------------+
-| host            | Target host        
+| host            | Remote host name or IP address       
 *-----------------+-------------------------------------------------------+
-| username        | Target's host username         
+| username        | Remote host's username         
 *-----------------+-------------------------------------------------------+
-| password        | Target's host password      
+| password        | Remote 's password      
 *-----------------+-------------------------------------------------------+
 
   
@@ -64,20 +64,20 @@ Usage
           <goal>run</goal>
         </goals>
         <configuration>
-          <scripts>
-            <script>path/to/a/script</script>
+          <files>
+            <file>path/to/a/script</file>
             [...]
-          </scripts>
-          <host>a-host</host>
+          </files>
+          <host>remote-host</host>
           <connectionType>ssh-or-telnet</connnectionType>
           <!-- the next 2 can be placed in settings.xml -->
-          <username>a-user-id</username>
-          <password>a-password</password>
+          <username>remote-host-username</username>
+          <password>remote-host-password</password>
         </configuration>
       <execution>
     </executions>
     
-    <!-- your favorite scripting engine -->
+    <!-- your favorite java scripting engine -->
     <dependencies>
       <dependency>
         <groupId>org.jruby</groupId>

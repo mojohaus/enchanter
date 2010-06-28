@@ -51,9 +51,9 @@
         
         <configuration>
           <settingsKey>lmi</settingsKey>
-          <scripts>
-            <script>${project.basedir}/src/main/script/TelnetLogin.rb</script>
-          </scripts>
+          <files>
+            <file>${project.basedir}/src/main/script/TelnetLogin.rb</file>
+          </files>
         </configuration>
         
         <executions>
