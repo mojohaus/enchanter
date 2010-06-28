@@ -22,9 +22,7 @@ Enchanter Maven Plugin
 
 * Goals Overview
 
-
-  * {{{enchanter:run.html}enchanter:run}}
-    Use this goal to execute a single script file or multiple script files. The later requires an existing pom file.
+  * {{{run-mojo.html}enchanter:run}} executes one more more scripts.
   
   []
   
