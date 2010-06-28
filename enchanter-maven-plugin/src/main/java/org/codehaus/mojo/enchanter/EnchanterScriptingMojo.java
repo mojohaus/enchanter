@@ -26,7 +26,6 @@ import javax.script.ScriptEngine;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Run Enchanter script using any any dynamic supported language ( ie ruby, javascript, python, groovy, beanshel, etc )
@@ -57,6 +56,9 @@ public class EnchanterScriptingMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
+        
+        loadUserInfoFromSettings();
+        
         if ( src != null )
         {
             srcFiles.add( 0, src );

@@ -45,6 +45,7 @@
         <artifactId>enchanter-maven-plugin</artifactId>
         <version>1.0-beta-1-SNAPSHOT</version>
         <configuration>
+          <settingsKey>lmi</settingsKey>
           <src>src/main/script/TelnetLogin.rb</src>
         </configuration>
       </plugin>

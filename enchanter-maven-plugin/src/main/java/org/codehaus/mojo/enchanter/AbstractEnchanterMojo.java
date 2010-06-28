@@ -23,22 +23,18 @@ import javax.script.ScriptEngineManager;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Server;
+import org.apache.maven.settings.Settings;
 import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
 import org.codehaus.mojo.enchanter.impl.GanymedSSHLibrary;
 import org.codehaus.mojo.enchanter.impl.TelnetConnectionLibrary;
 import org.codehaus.plexus.util.FileUtils;
+import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
+import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
 
 public abstract class AbstractEnchanterMojo
     extends AbstractMojo
 {
-    /**
-     * Internal
-     * 
-     * @parameter expression="${project}"
-     * @readonly
-     * @since 1.0-beta-1
-     */
-    protected MavenProject project;
 
     /**
      * Shell type. Acceptable values are telnet and ssh
@@ -61,8 +57,7 @@ public abstract class AbstractEnchanterMojo
     /**
      * Connection user name to login to remote system
      * 
-     * @parameter expression="${enchanter.username}" default-value="${os.username}"
-     * @required
+     * @parameter expression="${enchanter.username}" 
      * @since 1.0-beta-1
      */
     protected String username;
@@ -70,25 +65,61 @@ public abstract class AbstractEnchanterMojo
     /**
      * Connection password to login to remote system
      * 
-     * @parameter expression="${enchanter.password}" default-value=""
-     * @required
+     * @parameter expression="${enchanter.password}" 
      * @since 1.0-beta-1
      */
     protected String password;
 
+    /**
+     * Internal
+     * 
+     * @parameter expression="${project}"
+     * @readonly
+     * @since 1.0-beta-1
+     */
+    protected MavenProject project;
+
+    /**
+     * Internal
+     * 
+     * @parameter expression="${settings}"
+     * @since 1.0-beta-1
+     * @readonly
+     */
+    private Settings settings;
+
+    /**
+     * Server's <code>id</code> in <code>settings.xml</code> to look up username and password.
+     * Defaults to <code>${url}</code> if not given.
+     * @since 1.0
+     * @parameter expression="${settingsKey}"
+     */
+    private String settingsKey;
+
+    /**
+     * MNG-4384
+     * 
+     * @since 1.0-beta-1
+     * @component role="hidden.org.sonatype.plexus.components.sec.dispatcher.SecDispatcher"
+     * @required  
+     */
+    private SecDispatcher securityDispatcher;
     
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
     protected ScriptEngine getScriptEngine( File script )
         throws MojoExecutionException
     {
         String fileExt = FileUtils.getExtension( script.getName() );
-        
+
         ScriptEngine engine = new ScriptEngineManager().getEngineByExtension( fileExt );
-        
+
         if ( engine == null )
         {
             throw new MojoExecutionException( "Scripting engine not found for: " + script );
         }
-        
+
         return engine;
     }
 
@@ -110,7 +141,7 @@ public abstract class AbstractEnchanterMojo
 
     }
 
-    private StreamConnection createTelnetStreamConnection( )
+    private StreamConnection createTelnetStreamConnection()
     {
         DefaultStreamConnection streamConnection = new DefaultStreamConnection();
         TelnetConnectionLibrary connLib = new TelnetConnectionLibrary();
@@ -118,12 +149,55 @@ public abstract class AbstractEnchanterMojo
         return streamConnection;
     }
 
-    private StreamConnection createSshStreamConnection( )
+    private StreamConnection createSshStreamConnection()
     {
         DefaultStreamConnection streamConnection = new DefaultStreamConnection();
         GanymedSSHLibrary connLib = new GanymedSSHLibrary();
         streamConnection.setConnectionLibrary( connLib );
         return streamConnection;
+    }
+
+    /**
+     * Load username password from settings if user has not set them in JVM properties
+     * 
+     * @throws MojoExecutionException
+     */
+    protected void loadUserInfoFromSettings()
+        throws MojoExecutionException
+    {
+
+        if ( ( username == null || password == null ) )
+        {
+            Server server = this.settings.getServer( this.settingsKey );
+
+            if ( server != null )
+            {
+                if ( username == null )
+                {
+                    username = server.getUsername();
+                }
+
+                if ( password == null )
+                {
+                    if ( server.getPassword() != null )
+                    {
+                        try
+                        {
+                            password = securityDispatcher.decrypt( server.getPassword() );
+                        }
+                        catch ( SecDispatcherException e )
+                        {
+                            throw new MojoExecutionException( e.getMessage(), e );
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ( username == null )
+        {
+            throw new MojoExecutionException( "username is required." );
+        }
     }
 
 }
