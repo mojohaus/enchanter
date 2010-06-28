@@ -94,7 +94,7 @@ public abstract class AbstractEnchanterMojo
      * Server's <code>id</code> in <code>settings.xml</code> to look up username and password.
      * Defaults to <code>${url}</code> if not given.
      * @since 1.0
-     * @parameter expression="${settingsKey}"
+     * @parameter expression="${enchanter.settingsKey}"
      */
     private String settingsKey;
 

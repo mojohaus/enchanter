@@ -46,8 +46,8 @@ public class EnchanterScriptingMojo
     protected File src;
 
     /**
-     * List of files containing SQL statements to load. Its file extension determine the scripting execution type ( ie .rb is ruby )
-     * Missing script types are not allowed
+     * List of scripts files run. Its file extension determine the scripting execution type ( ie .rb is ruby )
+     * Mixing script types are not allowed
      * @since 1.0-beta-1
      * @parameter
      */

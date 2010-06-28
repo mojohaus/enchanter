@@ -10,8 +10,8 @@
 Enchanter Maven Plugin
 
 	Enchanter is a small library that helps you script Telnet/SSH sessions in a manner similar to Expect. 
-	Together with its plugin, you can run a single script from command line or a list of script through a Maven POM.
-	The plugin mainly used to boostrap the infrastructure and invoke the input script(s).
+	Together with its plugin, you can run a single script from command line or a list of script files through a Maven POM.
+	The Maven plugin bootstraps the infrastructure before invoking the input script(s).
 	
 	Enchanter was hosted at {{{http://code.google.com/p/enchanter} googlecode}}, and moved to MOJO to:
 	
@@ -27,7 +27,6 @@ Enchanter Maven Plugin
 
 * Goals Overview
 
-  There are 2 upgrade methods.
 
   * {{{enchanter:run.html}enchanter:run}}
     Use this goal to execute a single script file or multiple script files. The later requires an existing pom file.
