@@ -18,8 +18,6 @@ package org.codehaus.mojo.enchanter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.script.ScriptEngine;
 
@@ -28,7 +26,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.IOUtil;
 
 /**
- * Run Enchanter script using any any dynamic supported language ( ie ruby, javascript, python, groovy, beanshel, etc )
+ * Run Enchanter using your favorite Java scripting engine ( ie jruby, jython, beanshell, etc )
  * @goal run
  * @requiresProject false
  */

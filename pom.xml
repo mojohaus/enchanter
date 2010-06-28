@@ -20,7 +20,7 @@
   <name>Enchanter</name>
   
   <description>Enchanter is a small library that helps you script SSH/Telnet sessions in a manner similar to Expect. 
-     It also comes with a Maven plugin to setup connection and invoke your script(s) using jsr223 which is part of Java 1.6
+     It also comes with a Maven plugin to setup connection and invoke your script(s) using JSR-223 which is part of Java 1.6
   </description>
   
   <licenses>
