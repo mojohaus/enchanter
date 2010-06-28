@@ -29,6 +29,7 @@ import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
 import org.codehaus.mojo.enchanter.impl.GanymedSSHLibrary;
 import org.codehaus.mojo.enchanter.impl.TelnetConnectionLibrary;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
 import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
 
@@ -55,7 +56,8 @@ public abstract class AbstractEnchanterMojo
     protected String host;
 
     /**
-     * Connection user name to login to remote system
+     * Connection user name to login to remote system. The value can be set under user's settings.xml. See <i>settingsKey</i> for details.
+     * Null or blank is now allowed.
      * 
      * @parameter expression="${enchanter.username}" 
      * @since 1.0-beta-1
@@ -63,7 +65,7 @@ public abstract class AbstractEnchanterMojo
     protected String username;
 
     /**
-     * Connection password to login to remote system
+     * Connection password to login to remote system. The value can be set under user's settings.xml. See <i>settingsKey</i> for details.
      * 
      * @parameter expression="${enchanter.password}" 
      * @since 1.0-beta-1
@@ -104,9 +106,8 @@ public abstract class AbstractEnchanterMojo
      * @required  
      */
     private SecDispatcher securityDispatcher;
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
 
     protected ScriptEngine getScriptEngine( File script )
         throws MojoExecutionException
@@ -193,8 +194,8 @@ public abstract class AbstractEnchanterMojo
                 }
             }
         }
-        
-        if ( username == null )
+
+        if ( StringUtils.isBlank( username ) )
         {
             throw new MojoExecutionException( "username is required." );
         }

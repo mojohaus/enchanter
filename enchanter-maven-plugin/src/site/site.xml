@@ -30,6 +30,7 @@
       <item name="Goals" href="plugin-info.html"/>
     </menu>
     <menu name="Examples">
+      <item name="Configure settings.xml" href="examples/settings.html"/>
     </menu>
   </body>
 </project>
