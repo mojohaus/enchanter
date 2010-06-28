@@ -38,33 +38,20 @@ public class EnchanterScriptingMojo
 {
 
     /**
-     * Script path. Its file extension determine the scripting execution type ( ie .rb is ruby )
-     * 
-     * @parameter expression="${enchanter.src}" 
-     * @since 1.0-beta-1
-     */
-    protected File src;
-
-    /**
-     * List of scripts files run. Its file extension determine the scripting execution type ( ie .rb is ruby )
-     * Mixing script types are not allowed
+     * List of scripts files run. The first file in the list determines scripting engine type ( ie .rb is ruby )
+     * Mixing scripting types are not allowed
      * @since 1.0-beta-1
      * @parameter
      */
-    private List<File> srcFiles = new ArrayList<File>();
+    private File [] scripts = new File[0];
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
         
         loadUserInfoFromSettings();
-        
-        if ( src != null )
-        {
-            srcFiles.add( 0, src );
-        }
 
-        if ( srcFiles.isEmpty() )
+        if ( scripts.length == 0 )
         {
             this.getLog().warn( "No script(s) to run" );
             return;
@@ -75,17 +62,17 @@ public class EnchanterScriptingMojo
 
         try
         {
-            ScriptEngine engine = this.getScriptEngine();
 
             stream = this.getStreamConnection();
             stream.setDebug( true );
 
+            ScriptEngine engine = this.getScriptEngine();
             engine.put( "conn", stream );
             engine.put( "host", this.host );
             engine.put( "username", this.username );
             engine.put( "password", this.password );
 
-            for ( File script : srcFiles )
+            for ( File script : scripts )
             {
                 reader = new FileReader( script );
                 engine.eval( reader );
@@ -118,9 +105,9 @@ public class EnchanterScriptingMojo
     protected ScriptEngine getScriptEngine()
         throws MojoExecutionException
     {
-        if ( !this.srcFiles.isEmpty() )
+        if ( this.scripts.length != 0  )
         {
-            return this.getScriptEngine( this.srcFiles.get( 0 ) );
+            return this.getScriptEngine( this.scripts[0] );
         }
 
         return null;

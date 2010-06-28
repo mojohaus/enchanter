@@ -49,17 +49,7 @@ Usage
 
   For a full list of commands, see the {{{../enchanter-core/apidocs}StreamConnection interface}}   
   
-* Command line usage to execute a single script
-
----------------------
-
-mvn enchanter:run -Denchanter.src=/path/to/single/script -Denchanter.username=some-user-name \
-   -Denchanter.password=a-password -Denchanter.host=a-host -Denchanter.connectonType=telnet
-
----------------------
-
-* Maven project file to execute multiple scripts
-
+* Execute multiple scripts
 
 ------------------------------------
 
@@ -71,20 +61,31 @@ mvn enchanter:run -Denchanter.src=/path/to/single/script -Denchanter.username=so
     <executions>
       <execution>
         <goals>
-          <goal>generic-upgrade</goal>
+          <goal>run</goal>
         </goals>
         <configuration>
-          <srcFiles>
-            <srcFile>path/to/a/script</srcFile>
+          <scripts>
+            <script>path/to/a/script</script>
             [...]
-          </srcFiles>
-          <connectionType>ssh</connnectionType>
+          </scripts>
+          <host>a-host</host>
+          <connectionType>ssh-or-telnet</connnectionType>
+          <!-- the next 2 can be placed in settings.xml -->
           <username>a-user-id</username>
           <password>a-password</password>
-          <host>a-host</host>
         </configuration>
       <execution>
     </executions>
+    
+    <!-- your favorite scripting engine -->
+    <dependencies>
+      <dependency>
+        <groupId>org.jruby</groupId>
+        <artifactId>jruby</artifactId>
+        <version>1.5.1</version>
+      </dependency>
+    </dependencies>
+    
   </plugin>
   [...]
   

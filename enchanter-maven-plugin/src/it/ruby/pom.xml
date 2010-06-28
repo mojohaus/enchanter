@@ -39,16 +39,40 @@
   <name>Enchanter Maven Plugin - Ruby IT</name>
 
   <build>
+  
+    <defaultGoal>test</defaultGoal>
     <plugins>
+    
       <plugin>
+      
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>enchanter-maven-plugin</artifactId>
         <version>1.0-beta-1-SNAPSHOT</version>
+        
         <configuration>
           <settingsKey>lmi</settingsKey>
-          <src>src/main/script/TelnetLogin.rb</src>
+          <scripts>
+            <script>${project.basedir}/src/main/script/TelnetLogin.rb</script>
+          </scripts>
         </configuration>
+        
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals><goal>run</goal></goals>
+          </execution>
+        </executions>
+        
+        <dependencies>
+          <dependency>
+            <groupId>org.jruby</groupId>
+            <artifactId>jruby</artifactId>
+            <version>1.5.1</version>
+          </dependency>
+        </dependencies>
+        
       </plugin>
+      
     </plugins>
   </build>
 </project>

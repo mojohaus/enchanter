@@ -39,15 +39,45 @@
   <name>Enchanter Maven Plugin - Python IT</name>
 
   <build>
+  
+    <defaultGoal>test</defaultGoal>
     <plugins>
+    
       <plugin>
+      
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>enchanter-maven-plugin</artifactId>
         <version>1.0-beta-1-SNAPSHOT</version>
+        
         <configuration>
-          <src>src/main/script/TelnetLogin.py</src>
+          <settingsKey>lmi</settingsKey>
+          <scripts>
+            <script>${project.basedir}/src/main/script/TelnetLogin.py</script>
+          </scripts>
         </configuration>
+        
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals><goal>run</goal></goals>
+          </execution>
+        </executions>
+        
+        <dependencies>
+          <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython</artifactId>
+            <version>2.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>javax.scripting</groupId>
+            <artifactId>jython-engine</artifactId>
+            <version>20080611</version> <!-- see http://shibboleth.internet2.edu/downloads/maven2/javax/scripting/jython-engine -->
+          </dependency>
+        </dependencies>
+        
       </plugin>
+      
     </plugins>
   </build>
 </project>
