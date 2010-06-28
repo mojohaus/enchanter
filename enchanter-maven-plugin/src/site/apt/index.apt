@@ -22,7 +22,7 @@ Enchanter Maven Plugin
 
 * Goals Overview
 
-  * {{{run-mojo.html}enchanter:run}} executes one more more scripts.
+  * {{{run-mojo.html}enchanter:run}} executes script(s)
   
   []
   
