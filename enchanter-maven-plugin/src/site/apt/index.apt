@@ -35,11 +35,11 @@ Enchanter Maven Plugin
 
 * Examples
 
-  * {{http://svn.codehaus.org/mojo/trunk/sandbox/enchanter/enchanter-maven-plugin/src/it/ruby} Scripting with Ruby}}
+  * {{{http://svn.codehaus.org/mojo/trunk/sandbox/enchanter/enchanter-maven-plugin/src/it/ruby} Scripting with Ruby}}
   
-  * {{http://svn.codehaus.org/mojo/trunk/sandbox/enchanter/enchanter-maven-plugin/src/it/python} Scripting with Python}}
+  * {{{http://svn.codehaus.org/mojo/trunk/sandbox/enchanter/enchanter-maven-plugin/src/it/python} Scripting with Python}}
   
-  * {{examples/setting.html}Configure username/password with settings.html}}
+  * {{{examples/setting.html}Configure username/password with settings.html}}
   
   []
 
