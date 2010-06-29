@@ -1,9 +1,13 @@
-print 'set debug';
-stream.setDebug( true );
-print 'connecting...';
-stream.connect( host );
-stream.sendLine("");
-stream.waitFor(':~>');
-stream.sendLine('date');
-print 'Server date is '+ stream.getLine();
-ssh.disconnect();
+conn.connect( host )
+conn.sendLine("")
+conn.setTimeout( 1000 )
+conn.waitFor( "ogin:" )
+conn.sendLine( username )
+conn.waitFor( "assword:" )
+conn.sendLine( password )
+conn.waitFor( "0" )
+conn.sendLine( "date" );
+conn.waitFor( "0" )
+conn.sendLine( "exit" )
+conn.waitFor( "ogin:" )
+
