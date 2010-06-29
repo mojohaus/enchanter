@@ -1,4 +1,5 @@
 $conn.connect( $host )
+$conn.setDebug( true )
 $conn.sendLine("")
 $conn.setTimeout( 1000 )
 $conn.waitFor( "ogin:" )

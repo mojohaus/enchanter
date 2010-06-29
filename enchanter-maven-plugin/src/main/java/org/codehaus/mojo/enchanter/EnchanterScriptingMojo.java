@@ -62,7 +62,6 @@ public class EnchanterScriptingMojo
         {
 
             stream = this.getStreamConnection();
-            stream.setDebug( true );
 
             ScriptEngine engine = this.getScriptEngine();
             engine.put( "conn", stream );
