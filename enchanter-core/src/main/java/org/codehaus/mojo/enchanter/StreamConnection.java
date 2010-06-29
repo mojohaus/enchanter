@@ -196,6 +196,13 @@ public interface StreamConnection
     public void addStreamListener( StreamListener listener );
 
     /**
+     * Removes a stream listener 
+     * 
+     * @param listener The StreamListener implementation
+     */
+    public void removeStreamListener( StreamListener listener );
+    
+    /**
      * Sets whether to be in debugging mode or not. Debugging mode usually means
      * all the output will be copied to the console.
      * 

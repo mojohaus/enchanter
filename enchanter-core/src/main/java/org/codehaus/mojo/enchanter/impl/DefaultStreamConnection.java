@@ -48,6 +48,8 @@ public class DefaultStreamConnection
 
     private ConnectionLibrary connectionLibrary;
 
+    private StreamListener debugStreamListener = null;
+
     public DefaultStreamConnection()
     {
     }
@@ -163,28 +165,26 @@ public class DefaultStreamConnection
         streamListeners.add( listener );
     }
 
+    public void removeStreamListener( StreamListener listener )
+    {
+        streamListeners.remove( listener );
+    }
+    
     public void setDebug( boolean debug )
     {
+        if ( this.debugStreamListener == null )
+        {
+            this.debugStreamListener = new DebugStreamListener();
+        }
+        
         if ( debug )
         {
-            addStreamListener( new StreamListener()
-            {
-                public void hasRead( byte b )
-                {
-                    if ( b != '\r' )
-                        System.out.print( (char) b );
-                }
-
-                public void hasWritten( byte[] b )
-                {
-                    // Not usually necessary
-                    // System.out.print(new String(b));
-                }
-
-                public void init( PrintWriter writer )
-                {
-                }
-            } );
+            removeStreamListener( this.debugStreamListener ); //dont want duplicate
+            addStreamListener( debugStreamListener );
+        }
+        else
+        {
+            removeStreamListener( this.debugStreamListener );
         }
     }
 
@@ -517,6 +517,26 @@ public class DefaultStreamConnection
         public String getResponse()
         {
             return response;
+        }
+    }
+
+    private class DebugStreamListener
+        implements StreamListener
+    {
+        public void hasRead( byte b )
+        {
+            if ( b != '\r' )
+                System.out.print( (char) b );
+        }
+
+        public void hasWritten( byte[] b )
+        {
+            // Not usually necessary
+            // System.out.print(new String(b));
+        }
+
+        public void init( PrintWriter writer )
+        {
         }
     }
 
