@@ -274,6 +274,11 @@ public class DefaultStreamConnection
         this.timeout = timeout;
     }
 
+    public int getTimeout()
+    {
+        return this.timeout;
+    }
+    
     protected void prepare( String[] text )
     {
         this.alive = true;
@@ -328,6 +333,16 @@ public class DefaultStreamConnection
         }
 
         return length;
+    }
+    
+    public void flush()
+        throws IOException
+    {
+        while ( in.available() > 0 )
+        {
+            in.read();
+        }
+        
     }
 
     public int readFromStream( boolean readLineOnMatch )

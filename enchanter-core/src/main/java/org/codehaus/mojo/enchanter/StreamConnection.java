@@ -83,6 +83,13 @@ public interface StreamConnection
     public void setTimeout( int timeout );
 
     /**
+     * Get the current internal timeout value the timeout for all wait calls
+     * 
+     * @return value in milliseconds
+     */
+    public int getTimeout();
+    
+    /**
      * Sends the response whenever the prompt is encountered. Only activated
      * during a waitFor, waitForMux, or getLine call. If the response is null,
      * the respond trigger is removed.
@@ -211,4 +218,9 @@ public interface StreamConnection
     public void setDebug( boolean debug );
 
     public void setEndOfLine( String eol );
+    
+    /**
+     * Remove all data in ouput stream. Use this before send command if neccessary
+     */
+    public void flush() throws IOException;
 }
