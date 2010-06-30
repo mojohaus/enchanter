@@ -34,7 +34,7 @@ public class DefaultStreamConnection
 
     List<StreamListener> streamListeners = new ArrayList<StreamListener>();
 
-    private String endOfLine = "\r\n";
+    private String endOfLine = "\r";
 
     private char lastChar;
 
