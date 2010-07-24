@@ -335,7 +335,7 @@ public class DefaultStreamConnection
         return length;
     }
     
-    public void flush()
+    public void clear()
         throws IOException
     {
         while ( in.available() > 0 )

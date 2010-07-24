@@ -220,7 +220,7 @@ public interface StreamConnection
     public void setEndOfLine( String eol );
     
     /**
-     * Remove all data in ouput stream. Use this before send command if neccessary
+     * Remove all data in output stream. Use this before send command if neccessary
      */
-    public void flush() throws IOException;
+    public void clear() throws IOException;
 }
