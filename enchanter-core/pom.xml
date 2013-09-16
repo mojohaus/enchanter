@@ -18,7 +18,6 @@
     <dependency>
       <groupId>ch.ethz.ganymed</groupId>
       <artifactId>ganymed-ssh2</artifactId>
-      <version>build210</version>
     </dependency>
     
     <dependency>
