@@ -15,34 +15,25 @@ package org.codehaus.mojo.enchanter;
  * the License.
  */
 
-import org.codehaus.mojo.enchanter.ScriptRecorder;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import junit.framework.TestCase;
 
 public class ScriptRecorderTest
-    extends TestCase
 {
 
     ScriptRecorder rec = null;
 
-    public ScriptRecorderTest( String arg0 )
-    {
-        super( arg0 );
-    }
-
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
-        super.setUp();
         rec = new ScriptRecorder();
     }
 
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
 
+    @Test
     public void testHasRead()
         throws Exception
     {
@@ -50,9 +41,11 @@ public class ScriptRecorderTest
         {
             rec.hasRead( String.valueOf( x ).getBytes()[0] );
         }
-        assertEquals( "0123456789", new String( rec.lastChars ) );
+        
+        Assert.assertEquals( "0123456789", new String( rec.lastChars ) );
     }
 
+    @Test
     public void testHasRead_under()
         throws Exception
     {
@@ -60,9 +53,10 @@ public class ScriptRecorderTest
         {
             rec.hasRead( String.valueOf( x ).getBytes()[0] );
         }
-        assertEquals( "01234", rec.getLastChars() );
+        Assert.assertEquals( "01234", rec.getLastChars() );
     }
 
+    @Test
     public void testHasRead_overflow()
         throws Exception
     {
@@ -71,42 +65,46 @@ public class ScriptRecorderTest
             rec.hasRead( String.valueOf( x ).getBytes()[0] );
         }
         rec.hasRead( "3".getBytes()[0] );
-        assertEquals( "3123456789", new String( rec.lastChars ) );
+        Assert.assertEquals( "3123456789", new String( rec.lastChars ) );
     }
 
+    @Test
     public void testGetLastChars_start()
     {
         rec.lastChars = "0123456789".toCharArray();
         rec.lastCharsPos = 0;
-        assertEquals( "0123456789", rec.getLastChars() );
+        Assert.assertEquals( "0123456789", rec.getLastChars() );
     }
 
+    @Test
     public void testGetLastChars_midpoint()
     {
         rec.lastChars = "0123456789".toCharArray();
         rec.lastCharsPos = 2;
-        assertEquals( "2345678901", rec.getLastChars() );
+        Assert.assertEquals( "2345678901", rec.getLastChars() );
     }
 
     public void testGetLastChars_end()
     {
         rec.lastChars = "0123456789".toCharArray();
         rec.lastCharsPos = 9;
-        assertEquals( "9012345678", rec.getLastChars() );
+        Assert.assertEquals( "9012345678", rec.getLastChars() );
     }
 
+    @Test
     public void testGetLastChars_newlineMid()
     {
         rec.lastChars = "012\r\n56789".toCharArray();
         rec.lastCharsPos = 0;
-        assertEquals( "56789", rec.getLastChars() );
+        Assert.assertEquals( "56789", rec.getLastChars() );
     }
 
+    @Test
     public void testGetLastChars_newlineEnd()
     {
         rec.lastChars = "012345678\n".toCharArray();
         rec.lastCharsPos = 0;
-        assertEquals( "", rec.getLastChars() );
+        Assert.assertEquals( "", rec.getLastChars() );
     }
 
 }
