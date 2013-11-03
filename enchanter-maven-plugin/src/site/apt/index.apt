@@ -36,7 +36,7 @@ Enchanter Maven Plugin
   
   * {{{http://svn.codehaus.org/mojo/trunk/sandbox/enchanter/enchanter-maven-plugin/src/it/python} Scripting with Python}}
   
-  * {{{examples/settings.html}Configure username/password with settings.html}}
+  * {{{./examples/settings.html}Configure username/password with settings.html}}
   
   []
 
