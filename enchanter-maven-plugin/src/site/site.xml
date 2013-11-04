@@ -30,9 +30,9 @@
       <item name="Goals" href="plugin-info.html"/>
     </menu>
     <menu name="Examples">
-      <item name="Scripting with Ruby" href="http://svn.codehaus.org/mojo/trunk/sandbox/enchanter/enchanter-maven-plugin/src/it/ruby"/>
-      <item name="Scripting with Python" href="http://svn.codehaus.org/mojo/trunk/sandbox/enchanter/enchanter-maven-plugin/src/it/python"/>
-      <item name="Configure settings.xml" href="examples/settings.html"/>
+      <item name="Scripting with Ruby" href="http://svn.codehaus.org/mojo/trunk/mojo/enchanter/enchanter-maven-plugin/src/it/ruby"/>
+      <item name="Scripting with Python" href="http://svn.codehaus.org/mojo/trunk/mojo/enchanter/enchanter-maven-plugin/src/it/python"/>
+      <item name="Configure settings.xml" href="./examples/settings.html"/>
     </menu>
   </body>
 </project>
