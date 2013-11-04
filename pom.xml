@@ -12,7 +12,7 @@
   
   <groupId>org.codehaus.mojo.enchanter</groupId>
   <artifactId>enchanter</artifactId>
-  <version>1.0-beta-1</version>
+  <version>1.0-beta-2-SNAPSHOT</version>
 
   <packaging>pom</packaging>
   
@@ -36,9 +36,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/mojo/tags/enchanter-1.0-beta-1</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/enchanter-1.0-beta-1</developerConnection>
-    <url>https://svn.codehaus.org/mojo/tags/enchanter-1.0-beta-1</url>
+    <connection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/enchanter</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/enchanter</developerConnection>
+    <url>https://svn.codehaus.org/mojo/trunk/mojo/enchanter</url>
   </scm>
 
 
