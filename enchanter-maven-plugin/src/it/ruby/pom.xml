@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.codehaus.mojo.enchanter</groupId>
     <artifactId>enchanter</artifactId>
-    <version>1.0-beta-1-SNAPSHOT</version>
+    <version>1.0-beta-1</version>
   </parent>
 
   <groupId>org.codehaus.mojo</groupId>
@@ -47,7 +47,7 @@
       
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>enchanter-maven-plugin</artifactId>
-        <version>1.0-beta-1-SNAPSHOT</version>
+        <version>1.0-beta-1</version>
         
         <configuration>
           <settingsKey>lmi</settingsKey>
