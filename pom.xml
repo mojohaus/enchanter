@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   
   
   <modelVersion>4.0.0</modelVersion>
@@ -13,7 +12,7 @@
   
   <groupId>org.codehaus.mojo.enchanter</groupId>
   <artifactId>enchanter</artifactId>
-  <version>1.0-beta-1-SNAPSHOT</version>
+  <version>1.0-beta-1</version>
 
   <packaging>pom</packaging>
   
@@ -37,9 +36,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/enchanter</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/enchanter</developerConnection>
-    <url>https://svn.codehaus.org/mojo/trunk/mojo/enchanter</url>
+    <connection>scm:svn:https://svn.codehaus.org/mojo/tags/enchanter-1.0-beta-1</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/enchanter-1.0-beta-1</developerConnection>
+    <url>https://svn.codehaus.org/mojo/tags/enchanter-1.0-beta-1</url>
   </scm>
 
 
