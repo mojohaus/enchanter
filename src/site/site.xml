@@ -23,5 +23,11 @@
   <body>
     <menu ref="modules"/>
   </body>
+  <custom>
+    <fluidoSkin>
+      <profile>pre-release</profile>
+    </fluidoSkin>
+  </custom>
+  
 </project>
 
