@@ -6,9 +6,9 @@ package org.codehaus.mojo.enchanter;
  * copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License. You may obtain a
  * copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -26,7 +26,7 @@ public interface ConnectionLibrary
 
     /**
      * Connect to the remote StreamConnection server using no authentication and default port
-     * 
+     *
      * @param host The remote StreamConnection server
      * @throws IOException If a connection cannot be made
      */
@@ -35,7 +35,7 @@ public interface ConnectionLibrary
 
     /**
      * Connect to the remote StreamConnection server using no authentication
-     * 
+     *
      * @param host The remote StreamConnection server
      * @param port The port to use
      * @throws IOException If a connection cannot be made
@@ -45,7 +45,7 @@ public interface ConnectionLibrary
 
     /**
      * Connect to the remote StreamConnection server using public key authentication
-     * 
+     *
      * @param host The remote StreamConnection server
      * @param username The user name on the server
      * @throws IOException If a connection cannot be made
@@ -55,7 +55,7 @@ public interface ConnectionLibrary
 
     /**
      * Connect to the remote StreamConnection server using public key or password authentication
-     * 
+     *
      * @param host The remote StreamConnection server
      * @param username The user name on the server
      * @throws IOException If a connection cannot be made
@@ -65,7 +65,7 @@ public interface ConnectionLibrary
 
     /**
      * Connect to the remote StreamConnection server using public key or password authentication
-     * 
+     *
      * @param host The remote StreamConnection server
      * @param port The remote StreamConnection server port
      * @param username The user name on the server
@@ -88,14 +88,14 @@ public interface ConnectionLibrary
 
     /**
      * Disconnects from the remote StreamConnection server
-     * @throws IOException 
+     * @throws IOException
      */
     public void disconnect()
         throws IOException;
 
     /**
      * Disconnects from the remote StreamConnection server
-     * @throws IOException 
+     * @throws IOException
      */
     public void setReadTimeout( int msec )
         throws IOException, OperationNotSupportedException;

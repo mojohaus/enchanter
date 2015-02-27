@@ -6,17 +6,17 @@
     <artifactId>enchanter-scripting</artifactId>
     <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
- 
- 
+
+
   <artifactId>enchanter-beanshell</artifactId>
-  
+
   <name>Enchanter with Beanshell</name>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.beanshell</groupId>
       <artifactId>bsh</artifactId>
     </dependency>
   </dependencies>
-  
+
 </project>
