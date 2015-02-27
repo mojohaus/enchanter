@@ -1,27 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>32</version>
+    <version>34</version>
   </parent>
-  
-  
+
+
   <groupId>org.codehaus.mojo.enchanter</groupId>
   <artifactId>enchanter</artifactId>
   <version>1.0-beta-2-SNAPSHOT</version>
 
   <packaging>pom</packaging>
-  
+
   <name>Enchanter</name>
-  
-  <description>Enchanter is a small library that helps you script SSH/Telnet sessions in a manner similar to Expect. 
+
+  <description>Enchanter is a small library that helps you script SSH/Telnet sessions in a manner similar to Expect.
      It also comes with a Maven plugin to setup connection and invoke your script(s) using JSR-223 which is part of Java 1.6
   </description>
-  
+
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -60,9 +61,13 @@
         <role>Former Maintainer</role>
       </roles>
     </developer>
-    
-    
+
+
   </developers>
+
+  <properties>
+    <mojo.java.target>1.6</mojo.java.target>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
@@ -77,19 +82,19 @@
         <artifactId>commons-net</artifactId>
         <version>2.2</version>
       </dependency>
-      
+
       <dependency>
         <groupId>ch.ethz.ganymed</groupId>
         <artifactId>ganymed-ssh2</artifactId>
         <version>261</version>
       </dependency>
-      
+
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.5</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
@@ -101,18 +106,18 @@
         <artifactId>junit</artifactId>
         <version>4.11</version>
       </dependency>
-      
+
     </dependencies>
   </dependencyManagement>
-  
+
   <modules>
     <module>enchanter-core</module>
     <module>enchanter-maven-plugin</module>
   </modules>
 
-  
+
   <build>
     <defaultGoal>install</defaultGoal>
   </build>
-  
+
 </project>
