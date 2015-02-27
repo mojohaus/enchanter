@@ -6,9 +6,9 @@ package org.codehaus.mojo.enchanter;
  * copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License. You may obtain a
  * copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -39,7 +39,7 @@ public abstract class AbstractEnchanterMojo
 
     /**
      * Shell type. Acceptable values are telnet and ssh
-     * 
+     *
      * @parameter expression="${enchanter.type}" default-value="telnet"
      * @required
      * @since 1.0-beta-1
@@ -48,7 +48,7 @@ public abstract class AbstractEnchanterMojo
 
     /**
      * Connection user name to login to remote system
-     * 
+     *
      * @parameter expression="${enchanter.host}" default-value="localhost"
      * @required
      * @since 1.0-beta-1
@@ -58,23 +58,23 @@ public abstract class AbstractEnchanterMojo
     /**
      * Connection user name to login to remote system. The value can be set under user's settings.xml. See <i>settingsKey</i> for details.
      * Null or blank is now allowed.
-     * 
-     * @parameter expression="${enchanter.username}" 
+     *
+     * @parameter expression="${enchanter.username}"
      * @since 1.0-beta-1
      */
     protected String username;
 
     /**
      * Connection password to login to remote system. The value can be set under user's settings.xml. See <i>settingsKey</i> for details.
-     * 
-     * @parameter expression="${enchanter.password}" 
+     *
+     * @parameter expression="${enchanter.password}"
      * @since 1.0-beta-1
      */
     protected String password;
 
     /**
      * Internal
-     * 
+     *
      * @parameter expression="${project}"
      * @readonly
      * @since 1.0-beta-1
@@ -83,7 +83,7 @@ public abstract class AbstractEnchanterMojo
 
     /**
      * Internal
-     * 
+     *
      * @parameter expression="${settings}"
      * @since 1.0-beta-1
      * @readonly
@@ -100,10 +100,10 @@ public abstract class AbstractEnchanterMojo
 
     /**
      * MNG-4384
-     * 
+     *
      * @since 1.0-beta-1
      * @component role="hidden.org.sonatype.plexus.components.sec.dispatcher.SecDispatcher"
-     * @required  
+     * @required
      */
     private SecDispatcher securityDispatcher;
 
@@ -135,6 +135,10 @@ public abstract class AbstractEnchanterMojo
         {
             return createTelnetStreamConnection();
         }
+        else if ( "console".equals( this.connectionType ) )
+        {
+            return createConsoleStreamConnection();
+        }
         else
         {
             throw new MojoExecutionException( "Invalid connection type: " + connectionType );
@@ -158,9 +162,17 @@ public abstract class AbstractEnchanterMojo
         return streamConnection;
     }
 
+    private StreamConnection createConsoleStreamConnection()
+    {
+        DefaultStreamConnection streamConnection = new DefaultStreamConnection();
+        TelnetConnectionLibrary connLib = new TelnetConnectionLibrary();
+        streamConnection.setConnectionLibrary( connLib );
+        return streamConnection;
+    }
+
     /**
      * Load username password from settings if user has not set them in JVM properties
-     * 
+     *
      * @throws MojoExecutionException
      */
     protected void loadUserInfoFromSettings()
