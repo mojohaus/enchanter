@@ -109,7 +109,7 @@ public class ExecConnectionLibrary
     @Override
     public InputStream getInputStream()
     {
-        return System.in;
+        return p.getInputStream();
     }
 
     @Override
