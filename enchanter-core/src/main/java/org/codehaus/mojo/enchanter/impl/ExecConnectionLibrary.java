@@ -24,6 +24,8 @@ import javax.naming.OperationNotSupportedException;
 import org.codehaus.mojo.enchanter.ConnectionLibrary;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
+import org.codehaus.plexus.util.cli.DefaultConsumer;
+import org.codehaus.plexus.util.cli.StreamPumper;
 
 /**
  * Connection Library implementation via invocation of a external executable
@@ -38,6 +40,8 @@ public class ExecConnectionLibrary
     private String password;
 
     private Process p;
+
+    private StreamPumper errorPumper = null;
 
     public ExecConnectionLibrary( Commandline cl )
     {
@@ -92,6 +96,11 @@ public class ExecConnectionLibrary
         try
         {
             p = cl.execute();
+
+            errorPumper = new StreamPumper( p.getErrorStream(), new DefaultConsumer() );
+
+            errorPumper.start();
+
         }
         catch ( CommandLineException e )
         {
@@ -103,7 +112,21 @@ public class ExecConnectionLibrary
     public void disconnect()
         throws IOException
     {
+
         p.destroy();
+        try
+        {
+            errorPumper.waitUntilDone();
+        }
+        catch ( InterruptedException e )
+        {
+            errorPumper.disable();
+        }
+        finally
+        {
+            errorPumper.close();
+        }
+
     }
 
     @Override
