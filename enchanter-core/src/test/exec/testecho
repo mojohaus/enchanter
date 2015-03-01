@@ -1,2 +1,8 @@
-echo 123456789
-sleep 100000
+#!/bin/bash
+
+echo before-pause
+Press -n "any key to continue . . ."
+force-a-error-to-stdout
+echo after-pause
+#hang in here
+read

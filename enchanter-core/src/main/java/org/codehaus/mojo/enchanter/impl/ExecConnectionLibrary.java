@@ -118,7 +118,7 @@ public class ExecConnectionLibrary
         {
             errorPumper.waitUntilDone();
         }
-        catch ( InterruptedException e )
+        catch ( Exception e )
         {
             errorPumper.disable();
         }

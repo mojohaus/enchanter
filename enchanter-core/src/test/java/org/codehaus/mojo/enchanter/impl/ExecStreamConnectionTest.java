@@ -1,6 +1,5 @@
 package org.codehaus.mojo.enchanter.impl;
 
-
 import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.After;
@@ -15,7 +14,6 @@ public class ExecStreamConnectionTest
     private DefaultStreamConnection conn;
 
     private ExecConnectionLibrary lib;
-
 
     @Before
     public void setUp()
@@ -32,7 +30,7 @@ public class ExecStreamConnectionTest
         lib = new ExecConnectionLibrary( cl );
         conn.setConnectionLibrary( lib );
         conn.connect( "" );
-        //conn.setTimeout( 100 );
+        // conn.setTimeout( 100 );
     }
 
     @After
@@ -46,20 +44,11 @@ public class ExecStreamConnectionTest
     public void testNormalCommand()
         throws Exception
     {
-        Assert.assertTrue( "Not able to find 123456789 from sub process output stream", conn.waitFor( "123456789" ) );
+        Assert.assertTrue( "before-pause not found", conn.waitFor( "before-pause" ) );
+        Assert.assertTrue( "any key to continue . . . not found", conn.waitFor( "any key to continue . . ." ) );
+        Assert.assertFalse( "Found unexpected after-pause", conn.waitFor( "after-pause" ) );
+        conn.sendLine( "" );
+        Assert.assertTrue( "after-pause not found", conn.waitFor( "after-pause" ) );
     }
 
-    @Test
-    public void testNormalCommand2()
-        throws Exception
-    {
-        Assert.assertTrue( "Not able to find 12345678 from sub process output stream", conn.waitFor( "12345678" ) );
-    }
-
-    @Test
-    public void testNoFalsePositive()
-        throws Exception
-    {
-        Assert.assertFalse( conn.waitFor( "1234567890" ) );
-    }
 }
