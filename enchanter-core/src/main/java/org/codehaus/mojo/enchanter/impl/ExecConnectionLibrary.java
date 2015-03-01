@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import javax.naming.OperationNotSupportedException;
 
 import org.codehaus.mojo.enchanter.ConnectionLibrary;
+import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 
 /**
@@ -34,46 +35,75 @@ public class ExecConnectionLibrary
 
     private String passwordPrompt;
 
-    public ExecConnectionLibrary( Commandline cl, String passwordPrompt )
+    private String password;
+
+    private Process p;
+
+    public ExecConnectionLibrary( Commandline cl )
+    {
+        this.cl = cl;
+    }
+
+    public ExecConnectionLibrary( Commandline cl, String passwordPrompt, String password )
     {
         this.cl = cl;
         this.passwordPrompt = passwordPrompt;
+        this.password = password;
     }
 
     @Override
     public void connect( String host )
         throws IOException, OperationNotSupportedException
     {
+        connect();
     }
 
     @Override
     public void connect( String host, int port )
         throws IOException, OperationNotSupportedException
     {
+        connect();
     }
 
     @Override
     public void connect( String host, String username )
         throws IOException, OperationNotSupportedException
     {
+        connect();
     }
 
     @Override
     public void connect( String host, int port, String username, String password )
         throws IOException, OperationNotSupportedException
     {
+        connect();
     }
 
     @Override
     public void connect( String host, int port, String username, String password, String privateKeyPath )
         throws IOException, OperationNotSupportedException
     {
+        connect();
+    }
+
+    public void connect()
+        throws IOException
+    {
+        try
+        {
+            p = cl.execute();
+        }
+        catch ( CommandLineException e )
+        {
+            throw new IOException( "Unable to execute: " + cl, e );
+        }
     }
 
     @Override
     public void disconnect()
         throws IOException
     {
+        p.destroy();
     }
 
     @Override
@@ -85,7 +115,7 @@ public class ExecConnectionLibrary
     @Override
     public OutputStream getOutputStream()
     {
-        return System.out;
+        return p.getOutputStream();
     }
 
     @Override
