@@ -34,12 +34,14 @@ public class TelnetConnectionLibrary
 
     private TelnetClient sess;
 
+    @Override
     public void connect( String host )
         throws IOException, OperationNotSupportedException
     {
         connect( host, 23 );
     }
 
+    @Override
     public void connect( String host, int port )
         throws IOException, OperationNotSupportedException
     {
@@ -67,6 +69,7 @@ public class TelnetConnectionLibrary
         //sess.setSoTimeout(1000);
     }
 
+    @Override
     public void connect( String host, String username )
         throws IOException, OperationNotSupportedException
     {
@@ -75,6 +78,7 @@ public class TelnetConnectionLibrary
 
     }
 
+    @Override
     public void connect( String host, int port, String username, String password )
         throws IOException, OperationNotSupportedException
     {
@@ -83,6 +87,7 @@ public class TelnetConnectionLibrary
 
     }
 
+    @Override
     public void connect( String host, int port, String username, String password, String privateKeyPath )
         throws IOException, OperationNotSupportedException
     {
@@ -91,6 +96,7 @@ public class TelnetConnectionLibrary
 
     }
 
+    @Override
     public void disconnect()
         throws IOException
     {
@@ -101,16 +107,19 @@ public class TelnetConnectionLibrary
         }
     }
 
+    @Override
     public InputStream getInputStream()
     {
         return sess.getInputStream();
     }
 
+    @Override
     public OutputStream getOutputStream()
     {
         return sess.getOutputStream();
     }
 
+    @Override
     public void setReadTimeout( int msec )
         throws IOException, OperationNotSupportedException
     {

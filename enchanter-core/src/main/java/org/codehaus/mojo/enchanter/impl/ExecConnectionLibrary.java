@@ -22,55 +22,77 @@ import java.io.OutputStream;
 import javax.naming.OperationNotSupportedException;
 
 import org.codehaus.mojo.enchanter.ConnectionLibrary;
+import org.codehaus.plexus.util.cli.Commandline;
 
-public class ConsoleConnectionLibrary
+/**
+ * Connection Library implementation via invocation of a external executable
+ */
+public class ExecConnectionLibrary
     implements ConnectionLibrary
 {
+    private Commandline cl;
 
+    private String passwordPrompt;
+
+    public ExecConnectionLibrary( Commandline cl, String passwordPrompt )
+    {
+        this.cl = cl;
+        this.passwordPrompt = passwordPrompt;
+    }
+
+    @Override
     public void connect( String host )
         throws IOException, OperationNotSupportedException
     {
     }
 
+    @Override
     public void connect( String host, int port )
         throws IOException, OperationNotSupportedException
     {
     }
 
+    @Override
     public void connect( String host, String username )
         throws IOException, OperationNotSupportedException
     {
     }
 
+    @Override
     public void connect( String host, int port, String username, String password )
         throws IOException, OperationNotSupportedException
     {
     }
 
+    @Override
     public void connect( String host, int port, String username, String password, String privateKeyPath )
         throws IOException, OperationNotSupportedException
     {
     }
 
+    @Override
     public void disconnect()
         throws IOException
     {
     }
 
+    @Override
     public InputStream getInputStream()
     {
         return System.in;
     }
 
+    @Override
     public OutputStream getOutputStream()
     {
         return System.out;
     }
 
+    @Override
     public void setReadTimeout( int msec )
         throws IOException, OperationNotSupportedException
     {
-        //see http://www.javaspecialists.eu/archive/Issue153.html
+
     }
 
 }

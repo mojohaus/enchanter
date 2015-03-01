@@ -37,30 +37,35 @@ public class GanymedSSHLibrary
 
     private Session sess;
 
+    @Override
     public void connect( String host )
         throws IOException, OperationNotSupportedException
     {
         throw new OperationNotSupportedException();
     }
 
+    @Override
     public void connect( String host, int port )
         throws OperationNotSupportedException
     {
         throw new OperationNotSupportedException();
     }
 
+    @Override
     public void connect( String host, String username )
         throws IOException
     {
         connect( host, 22, username, "" );
     }
 
+    @Override
     public void connect( String host, int port, String username, String password )
         throws IOException
     {
         connect( host, port, username, password, null );
     }
 
+    @Override
     public void connect( String host, int port, String username, final String password, String privateKeyPath )
         throws IOException
     {
@@ -71,9 +76,8 @@ public class GanymedSSHLibrary
         conn.connect();
 
         /*
-         * Authenticate. If you get an IOException saying something like
-         * "Authentication method password not supported by the server at this
-         * stage." then please check the FAQ.
+         * Authenticate. If you get an IOException saying something like "Authentication method password not supported
+         * by the server at this stage." then please check the FAQ.
          */
 
         boolean triedCustomPublicKey = false;
@@ -105,8 +109,8 @@ public class GanymedSSHLibrary
                 try
                 {
                     triedStandardRSAPublicKey = true;
-                    isAuthenticated = conn.authenticateWithPublicKey( username, new File( home, ".ssh/id_rsa" ),
-                                                                      password );
+                    isAuthenticated =
+                        conn.authenticateWithPublicKey( username, new File( home, ".ssh/id_rsa" ), password );
                 }
                 catch ( IOException ex )
                 {
@@ -180,22 +184,26 @@ public class GanymedSSHLibrary
 
     }
 
+    @Override
     public OutputStream getOutputStream()
     {
         return sess.getStdin();
     }
 
+    @Override
     public InputStream getInputStream()
     {
         return sess.getStdout();
     }
 
+    @Override
     public void disconnect()
     {
         sess.close();
         sess = null;
     }
 
+    @Override
     public void setReadTimeout( int msec )
         throws IOException, OperationNotSupportedException
     {

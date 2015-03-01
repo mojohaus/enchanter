@@ -27,6 +27,7 @@ public class JSchConnectionLibrary
     implements ConnectionLibrary
 {
 
+    @Override
     public void connect( String host )
         throws IOException, OperationNotSupportedException
     {
@@ -34,6 +35,7 @@ public class JSchConnectionLibrary
 
     }
 
+    @Override
     public void connect( String host, int port )
         throws IOException, OperationNotSupportedException
     {
@@ -41,6 +43,7 @@ public class JSchConnectionLibrary
 
     }
 
+    @Override
     public void connect( String host, String username )
         throws IOException, OperationNotSupportedException
     {
@@ -48,6 +51,7 @@ public class JSchConnectionLibrary
 
     }
 
+    @Override
     public void connect( String host, int port, String username, String password )
         throws IOException, OperationNotSupportedException
     {
@@ -55,6 +59,7 @@ public class JSchConnectionLibrary
 
     }
 
+    @Override
     public void connect( String host, int port, String username, String password, String privateKeyPath )
         throws IOException, OperationNotSupportedException
     {
@@ -62,6 +67,7 @@ public class JSchConnectionLibrary
 
     }
 
+    @Override
     public void disconnect()
         throws IOException
     {
@@ -69,18 +75,21 @@ public class JSchConnectionLibrary
 
     }
 
+    @Override
     public InputStream getInputStream()
     {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public OutputStream getOutputStream()
     {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public void setReadTimeout( int msec )
         throws IOException, OperationNotSupportedException
     {

@@ -71,6 +71,7 @@ public class DefaultStreamConnection
         this.connectionLibrary = connLib;
     }
 
+    @Override
     public void connect( String host )
         throws IOException
     {
@@ -85,6 +86,7 @@ public class DefaultStreamConnection
         setupStreams();
     }
 
+    @Override
     public void connect( String host, int port )
         throws IOException
     {
@@ -99,6 +101,7 @@ public class DefaultStreamConnection
         setupStreams();
     }
 
+    @Override
     public void connect( String host, String username )
         throws IOException
     {
@@ -123,6 +126,7 @@ public class DefaultStreamConnection
         }
     }
 
+    @Override
     public void connect( String host, int port, String username, final String password )
         throws IOException
     {
@@ -137,6 +141,7 @@ public class DefaultStreamConnection
         setupStreams();
     }
 
+    @Override
     public void connect( String host, int port, String username, final String password, String privateKeyPath )
         throws IOException
     {
@@ -151,6 +156,7 @@ public class DefaultStreamConnection
         setupStreams();
     }
 
+    @Override
     public void setEndOfLine( String eol )
     {
         this.endOfLine = eol;
@@ -161,6 +167,7 @@ public class DefaultStreamConnection
         this.connectionLibrary = lib;
     }
 
+    @Override
     public void disconnect()
         throws IOException
     {
@@ -172,16 +179,19 @@ public class DefaultStreamConnection
         connectionLibrary.disconnect();
     }
 
+    @Override
     public void addStreamListener( StreamListener listener )
     {
         streamListeners.add( listener );
     }
 
+    @Override
     public void removeStreamListener( StreamListener listener )
     {
         streamListeners.remove( listener );
     }
 
+    @Override
     public void setDebug( boolean debug )
     {
         if ( this.debugStreamListener == null )
@@ -191,7 +201,7 @@ public class DefaultStreamConnection
 
         if ( debug )
         {
-            removeStreamListener( this.debugStreamListener ); //dont want duplicate
+            removeStreamListener( this.debugStreamListener ); // dont want duplicate
             addStreamListener( debugStreamListener );
         }
         else
@@ -200,6 +210,7 @@ public class DefaultStreamConnection
         }
     }
 
+    @Override
     public void send( String text )
         throws IOException
     {
@@ -207,12 +218,14 @@ public class DefaultStreamConnection
 
     }
 
+    @Override
     public void sendLine( String text )
         throws IOException
     {
         print( text, true );
     }
 
+    @Override
     public void sleep( int millis )
         throws InterruptedException
     {
@@ -243,6 +256,7 @@ public class DefaultStreamConnection
 
     }
 
+    @Override
     public void respond( String prompt, String response )
     {
         if ( response == null )
@@ -255,12 +269,14 @@ public class DefaultStreamConnection
         }
     }
 
+    @Override
     public boolean waitFor( String waitFor )
         throws IOException
     {
         return waitFor( waitFor, false );
     }
 
+    @Override
     public boolean waitFor( String waitFor, boolean readLineOnMatch )
         throws IOException
     {
@@ -268,12 +284,14 @@ public class DefaultStreamConnection
         return ( readFromStream( readLineOnMatch ) == 0 );
     }
 
+    @Override
     public int waitForMux( String... waitFor )
         throws IOException
     {
         return waitForMux( waitFor, false );
     }
 
+    @Override
     public int waitForMux( String[] waitFor, boolean readLineOnMatch )
         throws IOException
     {
@@ -281,11 +299,13 @@ public class DefaultStreamConnection
         return readFromStream( readLineOnMatch );
     }
 
+    @Override
     public void setTimeout( int timeout )
     {
         this.timeout = timeout;
     }
 
+    @Override
     public int getTimeout()
     {
         return this.timeout;
@@ -301,11 +321,13 @@ public class DefaultStreamConnection
         this.lastLine.setLength( 0 );
     }
 
+    @Override
     public String lastLine()
     {
         return this.lastLine.toString();
     }
 
+    @Override
     public String getLine()
         throws IOException
     {
