@@ -48,4 +48,18 @@ public class ExecStreamConnectionTest
     {
         Assert.assertTrue( "Not able to find 123456789 from sub process output stream", conn.waitFor( "123456789" ) );
     }
+
+    @Test
+    public void testNormalCommand2()
+        throws Exception
+    {
+        Assert.assertTrue( "Not able to find 12345678 from sub process output stream", conn.waitFor( "12345678" ) );
+    }
+
+    @Test
+    public void testNoFalsePositive()
+        throws Exception
+    {
+        Assert.assertFalse( conn.waitFor( "1234567890" ) );
+    }
 }
