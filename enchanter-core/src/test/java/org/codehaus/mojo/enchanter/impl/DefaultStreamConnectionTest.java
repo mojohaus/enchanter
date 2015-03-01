@@ -18,139 +18,142 @@ package org.codehaus.mojo.enchanter.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
-
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DefaultStreamConnectionTest
-    extends TestCase
 {
 
-    DefaultStreamConnection conn;
+    private DefaultStreamConnection conn;
 
-    StubConnectionLibrary lib;
+    private StubConnectionLibrary lib;
 
-    public DefaultStreamConnectionTest( String arg0 )
-    {
-        super( arg0 );
-    }
-
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
-        super.setUp();
         conn = new DefaultStreamConnection();
         lib = new StubConnectionLibrary();
         conn.setConnectionLibrary( lib );
         conn.connect( "host", "username" );
     }
 
-    protected void tearDown()
+    @After
+    public void tearDown()
         throws Exception
     {
-        super.tearDown();
     }
 
+    @Test
     public void testSend()
         throws IOException
     {
         conn.send( "foo" );
-        assertEquals( "foo", lib.dumpOut() );
+        Assert.assertEquals( "foo", lib.dumpOut() );
 
         conn.connect( null, null );
         conn.send( "foo^C" );
-        assertEquals( "foo" + ( (char) 3 ), lib.dumpOut() );
+        Assert.assertEquals( "foo" + ( (char) 3 ), lib.dumpOut() );
 
         conn.connect( null, null );
         conn.send( "foo^M" );
-        assertEquals( "foo\r\n", lib.dumpOut() );
+        Assert.assertEquals( "foo\r\n", lib.dumpOut() );
     }
 
+    @Test
     public void testSendLine()
         throws IOException
     {
         lib.setInputStream( new ByteArrayInputStream( "foo\r\n".getBytes() ) );
         conn.connect( null, null );
         conn.sendLine( "foo" );
-        assertEquals( "foo\r\n", lib.dumpOut() );
+        Assert.assertEquals( "foo\r\n", lib.dumpOut() );
     }
 
+    @Test
     public void testSleep()
         throws InterruptedException
     {
         long start = System.currentTimeMillis();
         int sleepTime = 100;
         conn.sleep( sleepTime );
-        long now = System.currentTimeMillis() + 1; //not very precise sleep
+        long now = System.currentTimeMillis() + 1; // not very precise sleep
         long diff = now - ( start + sleepTime );
-        assertTrue( "" + now + " not >= " + start + sleepTime + " diff is: " + diff, diff >= 0 );
+        Assert.assertTrue( "" + now + " not >= " + start + sleepTime + " diff is: " + diff, diff >= 0 );
     }
 
+    @Test
     public void testWaitForStringBoolean()
         throws IOException
     {
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
         conn.connect( null, null );
-        assertTrue( conn.waitFor( "bar", false ) );
-        assertTrue( conn.waitFor( "jo", false ) );
-        assertFalse( conn.waitFor( "asdf", false ) );
+        Assert.assertTrue( conn.waitFor( "bar", false ) );
+        Assert.assertTrue( conn.waitFor( "jo", false ) );
+        Assert.assertFalse( conn.waitFor( "asdf", false ) );
 
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
         conn.connect( null, null );
-        assertTrue( conn.waitFor( "bar", true ) );
-        assertTrue( conn.waitFor( "jo", true ) );
-        assertFalse( conn.waitFor( "asdf", true ) );
+        Assert.assertTrue( conn.waitFor( "bar", true ) );
+        Assert.assertTrue( conn.waitFor( "jo", true ) );
+        Assert.assertFalse( conn.waitFor( "asdf", true ) );
     }
 
+    @Test
     public void testWaitForWithRespond()
         throws IOException
     {
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
         conn.connect( null, null );
         conn.respond( "bar", "jim" );
-        assertTrue( conn.waitFor( "oo", false ) );
-        assertEquals( "foo", conn.lastLine() );
-        assertTrue( conn.waitFor( "jo", false ) );
-        assertFalse( conn.waitFor( "asdf", false ) );
+        Assert.assertTrue( conn.waitFor( "oo", false ) );
+        Assert.assertEquals( "foo", conn.lastLine() );
+        Assert.assertTrue( conn.waitFor( "jo", false ) );
+        Assert.assertFalse( conn.waitFor( "asdf", false ) );
 
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar\r\njoo".getBytes() ) );
         conn.connect( null, null );
-        assertTrue( conn.waitFor( "bar", true ) );
-        assertTrue( conn.waitFor( "jo", true ) );
-        assertFalse( conn.waitFor( "asdf", true ) );
+        Assert.assertTrue( conn.waitFor( "bar", true ) );
+        Assert.assertTrue( conn.waitFor( "jo", true ) );
+        Assert.assertFalse( conn.waitFor( "asdf", true ) );
     }
 
+    @Test
     public void testWaitForMuxStringArrayBoolean()
         throws IOException
     {
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
         conn.connect( null, null );
-        assertEquals( 1, conn.waitForMux( "bsar", "bar" ) );
-        assertEquals( 0, conn.waitForMux( "jo", "fdo" ) );
-        assertEquals( -1, conn.waitForMux( "asdf" ) );
+        Assert.assertEquals( 1, conn.waitForMux( "bsar", "bar" ) );
+        Assert.assertEquals( 0, conn.waitForMux( "jo", "fdo" ) );
+        Assert.assertEquals( -1, conn.waitForMux( "asdf" ) );
 
     }
 
+    @Test
     public void testLastLine()
         throws IOException
     {
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
         conn.connect( null, null );
         conn.waitFor( "bar" );
-        assertEquals( "bar", conn.lastLine() );
+        Assert.assertEquals( "bar", conn.lastLine() );
 
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
         conn.connect( null, null );
         conn.waitFor( "bar", true );
-        assertEquals( "bar ds", conn.lastLine() );
+        Assert.assertEquals( "bar ds", conn.lastLine() );
     }
 
+    @Test
     public void testGetLine()
         throws IOException
     {
         lib.setInputStream( new ByteArrayInputStream( "foo\r\nbar ds\r\njoo dsf".getBytes() ) );
         conn.connect( null, null );
-        assertEquals( "foo", conn.getLine() );
+        Assert.assertEquals( "foo", conn.getLine() );
     }
 
 }

@@ -17,27 +17,24 @@ package org.codehaus.mojo.enchanter.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
-import org.codehaus.mojo.enchanter.impl.DefaultStreamConnection;
-
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DefaultStreamConnectionPerformanceTest
-    extends TestCase
 {
 
-    DefaultStreamConnection ssh;
+    private DefaultStreamConnection ssh;
 
-    StubConnectionLibrary conn;
+    private StubConnectionLibrary conn;
 
-    byte[] bibleBytes;
+    private byte[] bibleBytes;
 
-    public DefaultStreamConnectionPerformanceTest( String arg0 )
-        throws IOException
+    @Before
+    public void setUp()
+        throws Exception
     {
-        super( arg0 );
         InputStream in = getClass().getResourceAsStream( "/kjv10.txt" );
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         byte[] buffer = new byte[2048];
@@ -48,12 +45,6 @@ public class DefaultStreamConnectionPerformanceTest
         }
         bibleBytes = bout.toByteArray();
 
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
         ssh = new DefaultStreamConnection();
         conn = new StubConnectionLibrary();
         conn.setInputStream( new ByteArrayInputStream( bibleBytes ) );
@@ -61,6 +52,7 @@ public class DefaultStreamConnectionPerformanceTest
         ssh.connect( "host", "username" );
     }
 
+    @Test
     public void testLotsOfWaitFor()
         throws Exception
     {
