@@ -1,9 +1,12 @@
-#!/bin/bash
+#! /bin/bash
 echo password:
-read
+sleep 2
+read var
 echo before-pause
-Press -n "any key to continue . . ."
+echo -n "Press any key to continue . . ."
+sleep 2
+read var
 force-a-error-to-stdout
-echo after-pause
+echo  after-pause
 #hang in here
 read

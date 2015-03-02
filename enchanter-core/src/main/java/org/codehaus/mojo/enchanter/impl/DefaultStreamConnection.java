@@ -116,7 +116,7 @@ public class DefaultStreamConnection
         setupStreams();
     }
 
-    // no scope so that ExecConnectionLibrary to setup up it passoword
+    // no scope so that ExecConnectionLibrary can set up its password
     void setupStreams()
     {
         this.in = new BufferedInputStream( connectionLibrary.getInputStream() );
