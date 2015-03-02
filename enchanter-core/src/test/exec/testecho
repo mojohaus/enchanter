@@ -1,11 +1,18 @@
 #! /bin/bash
+
 echo password:
+
+# we dont want to send a response too quickly and confuse the stream
 sleep 2
 read var
+
 echo before-pause
-echo -n "Press any key to continue . . ."
+echo  -n "Press any key to continue . . ."
+
+# we dont want to send a response too quickly and confuse the stream
 sleep 2
 read var
+
 force-a-error-to-stdout
 echo  after-pause
 #hang in here

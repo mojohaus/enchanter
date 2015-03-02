@@ -43,7 +43,8 @@ public class ExecStreamConnectionTest
                            conn.waitFor( "Press any key to continue . . ." ) );
         Assert.assertFalse( "Found unexpected after-pause", conn.waitFor( "after-pause" ) );
         conn.sendLine( "" );
-        Thread.sleep( 2000 );
+
+        Thread.sleep( 2000 );//see the simulated script
         Assert.assertTrue( "after-pause not found", conn.waitFor( "after-pause" ) );
     }
 
@@ -56,8 +57,8 @@ public class ExecStreamConnectionTest
         }
 
         Commandline cl = new Commandline( cmd );
-        //cl = new Commandline( "sh" );
-        //cl.createArg().setLine( "src/test/exec/testecho" );
+        cl = new Commandline( "sh" );
+        cl.createArg().setLine( "src/test/exec/testecho" );
 
         return cl;
     }
