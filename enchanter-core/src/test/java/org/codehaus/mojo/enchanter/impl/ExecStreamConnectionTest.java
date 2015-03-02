@@ -19,20 +19,15 @@ public class ExecStreamConnectionTest
     public void setUp()
         throws Exception
     {
-        if ( Os.isFamily( "windows" ) )
-        {
-            cmd += ".bat";
-            cmd = cmd.replace( '/', '\\' );
-        }
+        Commandline cl = this.createCommandLineSubProcess();
 
-        Commandline cl = new Commandline( cmd );
-        conn = new DefaultStreamConnection();
         lib = new ExecConnectionLibrary( cl, "password:", 1000, "password" );
         if ( Os.isFamily( "windows" ) )
         {
             lib = new ExecConnectionLibrary( cl );
         }
-        conn.setConnectionLibrary( lib );
+        conn = new DefaultStreamConnection(lib);
+
         conn.connect( "" );
         conn.setDebug( true );
         // conn.setTimeout( 2000000 );
@@ -49,7 +44,7 @@ public class ExecStreamConnectionTest
     public void testNormalCommand()
         throws Exception
     {
-        Thread.sleep( 2000 );//accommodate linux test
+        Thread.sleep( 2000 );
         Assert.assertTrue( "before-pause not found", conn.waitFor( "before-pause" ) );
         Assert.assertTrue( "Press any key to continue . . . not found",
                            conn.waitFor( "Press any key to continue . . ." ) );
@@ -61,9 +56,15 @@ public class ExecStreamConnectionTest
 
     private Commandline createCommandLineSubProcess()
     {
-        Commandline cl = new Commandline( "sh" );
-        // cl.createArg().setValue( "-x" );
-        cl.createArg().setLine( "src/test/exec/testecho" );
+        if ( Os.isFamily( "windows" ) )
+        {
+            cmd += ".bat";
+            cmd = cmd.replace( '/', '\\' );
+        }
+
+        Commandline cl = new Commandline( cmd );
+        //Commandline cl = new Commandline( "sh" );
+        //cl.createArg().setLine( "src/test/exec/testecho" );
 
         return cl;
     }
