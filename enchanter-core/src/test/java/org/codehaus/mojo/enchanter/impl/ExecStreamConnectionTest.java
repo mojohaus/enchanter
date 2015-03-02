@@ -27,7 +27,11 @@ public class ExecStreamConnectionTest
 
         Commandline cl = new Commandline( cmd );
         conn = new DefaultStreamConnection();
-        lib = new ExecConnectionLibrary( cl );
+        lib = new ExecConnectionLibrary( cl, "password:", 1000, "thePassword" );
+        if ( Os.isFamily( "windows" ) )
+        {
+            lib = new ExecConnectionLibrary( cl );
+        }
         conn.setConnectionLibrary( lib );
         conn.connect( "" );
         // conn.setTimeout( 100 );

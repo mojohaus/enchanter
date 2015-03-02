@@ -116,7 +116,8 @@ public class DefaultStreamConnection
         setupStreams();
     }
 
-    private void setupStreams()
+    // no scope so that ExecConnectionLibrary to setup up it passoword
+    void setupStreams()
     {
         this.in = new BufferedInputStream( connectionLibrary.getInputStream() );
         this.out = new PrintWriter( connectionLibrary.getOutputStream() );

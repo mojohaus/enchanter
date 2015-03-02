@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import javax.naming.OperationNotSupportedException;
 
 import org.codehaus.mojo.enchanter.ConnectionLibrary;
+import org.codehaus.mojo.enchanter.StreamConnection;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.DefaultConsumer;
@@ -39,19 +40,27 @@ public class ExecConnectionLibrary
 
     private String password;
 
+    private int passwordPromptTimeout = 1000;
+
     private Process p;
 
     private StreamPumper errorPumper = null;
 
     public ExecConnectionLibrary( Commandline cl )
     {
-        this.cl = cl;
+        this.init( cl, null, 0, null );
     }
 
-    public ExecConnectionLibrary( Commandline cl, String passwordPrompt, String password )
+    public ExecConnectionLibrary( Commandline cl, String passwordPrompt, int passwordPromptTimeout, String password )
+    {
+        this.init( cl, passwordPrompt, passwordPromptTimeout, password );
+    }
+
+    private void init( Commandline cl, String passwordPrompt, int passwordPromptTimeout, String password )
     {
         this.cl = cl;
         this.passwordPrompt = passwordPrompt;
+        this.passwordPromptTimeout = passwordPromptTimeout;
         this.password = password;
     }
 
@@ -98,13 +107,31 @@ public class ExecConnectionLibrary
             p = cl.execute();
 
             errorPumper = new StreamPumper( p.getErrorStream(), new DefaultConsumer() );
-
             errorPumper.start();
+
+            if ( this.passwordPrompt != null )
+            {
+                DefaultStreamConnection conn = new DefaultStreamConnection( this );
+                conn.setTimeout( this.passwordPromptTimeout );
+                conn.setupStreams();
+                if ( conn.waitFor( this.passwordPrompt ) )
+                {
+                    conn.sendLine( password );
+                }
+                else
+                {
+                    this.disconnect();
+                }
+            }
 
         }
         catch ( CommandLineException e )
         {
             throw new IOException( "Unable to execute: " + cl, e );
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
         }
     }
 
@@ -112,7 +139,6 @@ public class ExecConnectionLibrary
     public void disconnect()
         throws IOException
     {
-
         p.destroy();
         try
         {
@@ -126,7 +152,6 @@ public class ExecConnectionLibrary
         {
             errorPumper.close();
         }
-
     }
 
     @Override
@@ -145,7 +170,6 @@ public class ExecConnectionLibrary
     public void setReadTimeout( int msec )
         throws IOException, OperationNotSupportedException
     {
-
     }
 
 }
