@@ -13,23 +13,16 @@ public class ExecStreamConnectionTest
 
     private DefaultStreamConnection conn;
 
-    private ExecConnectionLibrary lib;
-
     @Before
     public void setUp()
         throws Exception
     {
         Commandline cl = this.createCommandLineSubProcess();
+        conn = new DefaultStreamConnection( createConnectionLibrary( cl ) );
 
-        lib = new ExecConnectionLibrary( cl, "password:", 1000, "password" );
-        if ( Os.isFamily( "windows" ) )
-        {
-            lib = new ExecConnectionLibrary( cl );
-        }
-        conn = new DefaultStreamConnection(lib);
-
-        conn.connect( "" );
         conn.setDebug( true );
+        conn.connect( "" );
+
         // conn.setTimeout( 2000000 );
     }
 
@@ -63,10 +56,20 @@ public class ExecStreamConnectionTest
         }
 
         Commandline cl = new Commandline( cmd );
-        //Commandline cl = new Commandline( "sh" );
+        //cl = new Commandline( "sh" );
         //cl.createArg().setLine( "src/test/exec/testecho" );
 
         return cl;
+    }
+
+    private ExecConnectionLibrary createConnectionLibrary( Commandline cl )
+    {
+        ExecConnectionLibrary lib = new ExecConnectionLibrary( cl );
+        if ( cl.getExecutable().equals( "sh" ) )
+        {
+            lib = new ExecConnectionLibrary( cl, "password:", 1000, "password" );
+        }
+        return lib;
     }
 
 }
