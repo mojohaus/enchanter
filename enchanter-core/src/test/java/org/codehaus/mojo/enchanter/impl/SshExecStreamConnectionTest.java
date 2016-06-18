@@ -8,7 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
-public class ExecStreamConnectionTest
+public class SshExecStreamConnectionTest
 {
     private DefaultStreamConnection conn;
 
@@ -36,8 +36,8 @@ public class ExecStreamConnectionTest
     public void testNormalCommand()
         throws Exception
     {
-        Thread.sleep( 2000 );
-        Assert.assertTrue( "Password prompt not found", conn.waitFor( "Password:" ) );
+        Thread.sleep( 4000 );
+        Assert.assertTrue( "Password prompt not found", conn.waitFor( "Password" ) );
         conn.sendLine( "changeme" );
 
         Thread.sleep( 5000 );//see the simulated script

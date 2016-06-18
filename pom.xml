@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>35-SNAPSHOT</version>
+    <version>39</version>
   </parent>
 
 
@@ -31,17 +31,16 @@
     </license>
   </licenses>
 
-  <issueManagement>
-    <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MOJO</url>
-  </issueManagement>
-
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/enchanter</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/enchanter</developerConnection>
-    <url>https://svn.codehaus.org/mojo/trunk/mojo/enchanter</url>
+    <connection>scm:git:https://github.com/mojohaus/enchanter.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/mojohaus/enchanter.git</developerConnection>
+    <url>https://github.com/mojohaus/enchanter</url>
+    <tag>HEAD</tag>
   </scm>
-
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/mojohaus/enchanter-maven-plugin/issues</url>
+  </issueManagement>
 
   <developers>
     <developer>
@@ -92,19 +91,19 @@
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
-        <version>2.5</version>
+        <version>2.6</version>
       </dependency>
 
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>3.0.21</version>
+        <version>3.0.24</version>
       </dependency>
 
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.11</version>
+        <version>4.12</version>
       </dependency>
 
     </dependencies>

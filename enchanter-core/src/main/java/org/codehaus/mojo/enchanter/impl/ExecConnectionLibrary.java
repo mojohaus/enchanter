@@ -22,7 +22,6 @@ import java.io.OutputStream;
 import javax.naming.OperationNotSupportedException;
 
 import org.codehaus.mojo.enchanter.ConnectionLibrary;
-import org.codehaus.mojo.enchanter.StreamConnection;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.DefaultConsumer;
